@@ -29,12 +29,6 @@ class Proxy: Sujeto {
         print("Proxy: Registrando actividad después de la solicitud.")
     }
     
-    // Método adicional para demostrar funcionalidad extra del proxy
-    func verificarAcceso() -> Bool {
-        print("Proxy: Verificando permisos de acceso...")
-        // Simulamos una verificación de acceso
-        return true
-    }
 }
 
 // 4. Código del cliente
