@@ -35,7 +35,7 @@ class Radio: Dispositivo {
 
 // Abstracción (Controles remotos)
 class ControlRemoto {
-    fileprivate let dispositivo: Dispositivo
+    let dispositivo: Dispositivo
     
     init(dispositivo: Dispositivo) {
         self.dispositivo = dispositivo
@@ -68,7 +68,7 @@ class ControlAvanzado: ControlRemoto {
 
 // Uso del patrón Bridge
 func demostracionBridge() {
-        
+
     // Crear dispositivos
     let tv = Televisor()
     let radio = Radio()

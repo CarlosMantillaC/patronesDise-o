@@ -1,75 +1,72 @@
 protocol ComponenteHTML {
-    func construir() -> String
     func mostrar() -> String
 }
 
+// Componentes concretos
 class Select: ComponenteHTML {
-    func construir() -> String { "<select></select>" }
     func mostrar() -> String { "<select>Mostrar</select>" }
 }
 
 class Button: ComponenteHTML {
-    func construir() -> String { "<button></button>" }
     func mostrar() -> String { "<button>Mostrar</button>" }
 }
 
 class Checkbox: ComponenteHTML {
-    func construir() -> String { "<input type='checkbox' />" }
     func mostrar() -> String { "<input type='checkbox' /> Mostrar" }
 }
 
 class Builder {
     private var nombresComponentes: [String] = []
-
-    func agregar(nombre: String) {
-        nombresComponentes.append(nombre)
+    
+    func agregar(nombre: String) -> Self {
+        nombresComponentes.append(nombre.lowercased())
+        return self
     }
-
-    func obtenerNombres() -> [String] {
-        return nombresComponentes
+    
+    func build() -> Form {
+        var html = ""
+        for nombre in nombresComponentes {
+            switch nombre {
+            case "select":
+                html += Select().mostrar()
+            case "button":
+                html += Button().mostrar()
+            case "checkbox":
+                html += Checkbox().mostrar()
+            default:
+                print("⚠️ Componente no válido: '\(nombre)'")
+                continue
+            }
+        }
+        return Form(html: html)
     }
 }
 
-class Formulario {
-    private let builder: Builder
-
-    init(builder: Builder) {
-        self.builder = builder
+class Form {
+    private let html: String
+    
+    init(html: String) {
+        self.html = html
     }
-
-
-    func mostrarForm() -> String {
-        var html = ""
-        let nombres = builder.obtenerNombres()
-
-        for nombre in nombres {
-            var componente: ComponenteHTML?
-
-            switch nombre.lowercased() {
-                case "select":
-                    componente = Select()
-                case "button":
-                    componente = Button()
-                case "checkbox":
-                    componente = Checkbox()
-                default:
-                    print("Ingrediente desconocido: \(nombre)")
-            }
-
-            if let comp = componente {
-                html += comp.mostrar()
-            }
-        }
-
+    
+    func render() -> String {
         return html
     }
 }
 
-let builder = Builder()
-builder.agregar(nombre: "select")
-builder.agregar(nombre: "button")
-builder.agregar(nombre: "checkbox")
+// Uso con validación
+let form = Builder()
+    .agregar(nombre: "select")
+    .agregar(nombre: "button")
+    .agregar(nombre: "checkbox")
+    .build()
 
-let formulario = Formulario(builder: builder)
+    let form2 = Builder()
+    .agregar(nombre: "select")
+    .agregar(nombre: "button")
+    .agregar(nombre: "checkbox")
+    .build()
 
-print(formulario.mostrarForm())
+
+print(form.render())
+print(form2.render())
