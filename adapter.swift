@@ -84,7 +84,6 @@ class ElectricoAdapter: Motor {
     }
 }
 
-// Ejemplo de uso
 func main() {
     print("--- Usando motor naftero ---")
     let motor1: Motor = MotorNaftero()
@@ -95,11 +94,10 @@ func main() {
     
     print("\n--- Usando motor eléctrico a través del adapter ---")
     let motor2: Motor = ElectricoAdapter()
-    motor2.arrancar()    // Esto llama a enchufar(), conectar() y activar()
-    motor2.acelerar()    // Esto llama a mover()
-    motor2.cargarCombustible() // Mensaje especial para eléctrico
-    motor2.apagar()      // Esto llama a parar() y desconectar()
+    motor2.arrancar()
+    motor2.acelerar()
+    motor2.cargarCombustible()
+    motor2.apagar()
 }
 
-// Ejecutar el ejemplo
 main()
