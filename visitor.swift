@@ -1,27 +1,10 @@
 protocol VisitorFigura {
-    func visitar(triangulo: Triangulo)
     func visitar(cuadrado: Cuadrado)
     func visitar(pentagono: Pentagono)
 }
 
 protocol Figura {
     func aceptar(visitor: VisitorFigura)
-}
-
-class Triangulo: Figura {
-    let lado1: Double
-    let lado2: Double
-    let lado3: Double
-    
-    init(lado1: Double, lado2: Double, lado3: Double) {
-        self.lado1 = lado1
-        self.lado2 = lado2
-        self.lado3 = lado3
-    }
-    
-    func aceptar(visitor: VisitorFigura) {
-        visitor.visitar(triangulo: self)
-    }
 }
 
 class Cuadrado: Figura {
@@ -51,10 +34,6 @@ class Pentagono: Figura {
 class VisitorSumarLados: VisitorFigura {
     private var totalLados: Double = 0
     
-    func visitar(triangulo: Triangulo) {
-        totalLados += triangulo.lado1 + triangulo.lado2 + triangulo.lado3
-    }
-    
     func visitar(cuadrado: Cuadrado) {
         totalLados += cuadrado.lado * 4
     }
@@ -68,21 +47,20 @@ class VisitorSumarLados: VisitorFigura {
     }
 }
 
-let triangulo = Triangulo(lado1: 3, lado2: 4, lado3: 5)
 let cuadrado = Cuadrado(lado: 6)
 let pentagono = Pentagono(lado: 2)
 
 let visitorSuma = VisitorSumarLados()
 
-let figuras: [Figura] = [triangulo, cuadrado, pentagono]
+let figuras: [Figura] = [cuadrado, pentagono]
 for figura in figuras {
     figura.aceptar(visitor: visitorSuma)
 }
 
 print("Suma de lados: \(visitorSuma.obtenerTotal())")
 
-let visitorTriangulo = VisitorSumarLados()
+let visitorCuadrado = VisitorSumarLados()
 
-triangulo.aceptar(visitor: visitorTriangulo)
+cuadrado.aceptar(visitor: visitorCuadrado)
 
-print(visitorTriangulo.obtenerTotal())
+print(visitorCuadrado.obtenerTotal())
