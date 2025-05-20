@@ -1,0 +1,63 @@
+interfaz Builder:
+    mostrar()
+
+class BuilderF: 
+    static instancia
+    etiquetas = []
+
+    static getInstancia():
+        if instancia == null:
+            instancia = BuilderF
+            return instancia
+
+    agregar(etiqueta):
+        etiquetas.append(etiqueta)
+
+// Builders principales
+class HTMLBuilder implements BuilderI:
+    body = new BodyBuilder()
+    mostrar(): "<html>" + body.mostrar() + "</html>"
+
+class BodyBuilder implements BuilderI:
+    form = new FormBuilder()
+    mostrar(): "<body>" + form.mostrar() + "</body>"
+
+class FormBuilder implements BuilderI:
+    builder = BuilderF.getInstancia()
+    mostrar(): "<form>" + builder.etiquetas.join("") + "</form>"
+
+// Decorator
+class DivDecorator implements BuilderI:
+    constructor(componente):
+        this.componente = componente
+    mostrar(): "<div>" + componente.mostrar() + "</div>"
+
+// Adapter
+class InputLegacy:
+    render(): "<input-legacy/>"
+
+class InputAdapter implements BuilderI:
+    constructor(legacy):
+        this.legacy = legacy
+    mostrar(): legacy.render()
+
+// Elementos básicos
+class Button implements BuilderI:
+    mostrar(): "<button/>"
+
+// Cliente
+class Cliente:
+    fabricar():
+        builder = BuilderF.getInstancia()
+        
+        // Adapter
+        builder.agregar(new InputAdapter(new InputLegacy()).mostrar())
+        
+        // Decorator
+        boton = new DivDecorator(new Button())
+        builder.agregar(boton.mostrar())
+        
+        return new HTMLBuilder().mostrar()
+
+// Ejecución
+print(new Cliente().fabricar())
