@@ -9,19 +9,31 @@ ContenedorFormulario(): InterfazEtiquetas
         contenedor = ""
         para cada hijo en hijos:
             contenedor += hijo.render()
-        return <fieldset> contenedor </fieldset>
+        return <div> contenedor </div>
 --------------------------------------------------------------------------------
 
-fieldset1 = ContenedorFormulario()
+div1 = ContenedorFormulario()
 
-campoNombre = new Input
-campoEmail = new Input
-botonEnviar = new Boton
+input1 = new Input
+boton1 = new Boton
 
-fieldset1.agregar(campoNombre)
-fieldset1.agregar(campoEmail)
-fieldset1.agregar(botonEnviar)
+div1.agregar(input1)
+div1.agregar(boton1)
 
-print(fieldset1.render())
+print(div1.render())
+----------------------------------------------------------------------------
 
+div2 = ContenedorFormulario()
+
+div3 = ContenedorFormulario()
+
+input2 = new Input
+boton2 = new Boton
+select1 = new Select
+
+div3.agregar(input2)
+div3.agregar(boton2)
+div3.agregar(select1)
+
+div2.agregar(div3)
 
