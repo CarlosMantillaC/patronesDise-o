@@ -1,63 +1,27 @@
-interfaz Builder:
-    mostrar()
+ContenedorFormulario(): InterfazEtiquetas
 
-class BuilderF: 
-    static instancia
-    etiquetas = []
+    hijos = [InterfazEtiquetas]
 
-    static getInstancia():
-        if instancia == null:
-            instancia = BuilderF
-            return instancia
+    método agregar(componente: InterfazEtiquetas):
+        hijos.agregar(componente)
 
-    agregar(etiqueta):
-        etiquetas.append(etiqueta)
+    método render():
+        contenedor = ""
+        para cada hijo en hijos:
+            contenedor += hijo.render()
+        return <fieldset> contenedor </fieldset>
+--------------------------------------------------------------------------------
 
-// Builders principales
-class HTMLBuilder implements BuilderI:
-    body = new BodyBuilder()
-    mostrar(): "<html>" + body.mostrar() + "</html>"
+fieldset1 = ContenedorFormulario()
 
-class BodyBuilder implements BuilderI:
-    form = new FormBuilder()
-    mostrar(): "<body>" + form.mostrar() + "</body>"
+campoNombre = new Input
+campoEmail = new Input
+botonEnviar = new Boton
 
-class FormBuilder implements BuilderI:
-    builder = BuilderF.getInstancia()
-    mostrar(): "<form>" + builder.etiquetas.join("") + "</form>"
+fieldset1.agregar(campoNombre)
+fieldset1.agregar(campoEmail)
+fieldset1.agregar(botonEnviar)
 
-// Decorator
-class DivDecorator implements BuilderI:
-    constructor(componente):
-        this.componente = componente
-    mostrar(): "<div>" + componente.mostrar() + "</div>"
+print(fieldset1.render())
 
-// Adapter
-class InputLegacy:
-    render(): "<input-legacy/>"
 
-class InputAdapter implements BuilderI:
-    constructor(legacy):
-        this.legacy = legacy
-    mostrar(): legacy.render()
-
-// Elementos básicos
-class Button implements BuilderI:
-    mostrar(): "<button/>"
-
-// Cliente
-class Cliente:
-    fabricar():
-        builder = BuilderF.getInstancia()
-        
-        // Adapter
-        builder.agregar(new InputAdapter(new InputLegacy()).mostrar())
-        
-        // Decorator
-        boton = new DivDecorator(new Button())
-        builder.agregar(boton.mostrar())
-        
-        return new HTMLBuilder().mostrar()
-
-// Ejecución
-print(new Cliente().fabricar())
