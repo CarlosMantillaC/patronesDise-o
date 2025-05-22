@@ -1,113 +1,139 @@
-INTERFACE Component:
-    METHOD render()
+INTERFAZ Component
+    MÉTODO ABSTRACTO render()
 
-CLASS Button IMPLEMENTS Component:
-    METHOD render():
-        RETURN "<button> </button>"
+CLASE Button IMPLEMENTA Component
+    MÉTODO render()
+        RETORNAR "<button> </button>"
 
-CLASS Select IMPLEMENTS Component:
-    METHOD render():
-        RETURN "<select> </select>"
+CLASE InputText IMPLEMENTA Component
+    MÉTODO render()
+        RETORNAR "<input />"
 
-CLASS InputText IMPLEMENTS Component:
-    METHOD render():
-        RETURN "<input />"
+CLASE Select IMPLEMENTA Component
+    MÉTODO render()
+        RETORNAR "<select> </select>"
 
-# ==============================
-# PATRÓN ADAPATER
-# ==============================
+---------------------------------------
+PATRÓN DECORATOR
+---------------------------------------
+CLASE TypeDecorator IMPLEMENTA Component
+    ATRIBUTO component
 
-class TypeDecorator(Component):
-    def __init__(self, component):
-        self.component = component
+    CONSTRUCTOR(component)
+        ASIGNAR this.component = component
 
-    def render(self):
-        return self.component.render()
-    
-class InputTypeDecorator(TypeDecorator):
-    def __init__(self, component):
-        super().__init__(component)
+    MÉTODO render()
+        RETORNAR component.render()
 
-    def render(self):
-        html = self.component.render()
-        html = html.replace("<input", f'<input type="radio"')
-        return html
+CLASE InputTypeDecorator EXTENDIENDO TypeDecorator
+    CONSTRUCTOR(component)
+        LLAMAR super CONSTRUCTOR con component
 
-// =============================
-// Patrón Composite
-// =============================
+    MÉTODO render()
+        html = component.render()
+        REEMPLAZAR "<input" POR '<input type="radio"' EN html
+        RETORNAR html
 
-INTERFACE SalidaBuilder:
-    METHOD get_components()
+---------------------------------------
+PATRÓN COMPOSITE
+---------------------------------------
+CLASE Formulario IMPLEMENTA Component
+    ATRIBUTO components (lista vacía)
 
-CLASS Formulario IMPLEMENTS SalidaBuilder:
-    ATTRIBUTE components : [Component]
+    MÉTODO add_component(comp)
+        AGREGAR comp A components
 
-    METHOD add_component(comp):
-        self.components.append(comp)
-
-    METHOD get_components():
-        RETURN components
-
-// =============================
-// Patrón Adapter
-// =============================
-
-CLASS SalidaAdapter:
-    ATTRIBUTE form : SalidaBuilder
-
-    def getEntradaFormada():
+    MÉTODO render()
         html = ""
-        for comp in form.get_components():
-            html += comp.render()
-        return html
+        PARA cada comp EN components
+            html = html + comp.render()
+        FIN PARA
+        RETORNAR "<div>" + html + "</div>"
 
-// =============================
-// Patrón Singleton
-// =============================
+---------------------------------------
+PATRÓN ADAPTER
+---------------------------------------
+CLASE SalidaAdapter
+    ATRIBUTO obj
 
-class Render:
-    _instance = None
+    CONSTRUCTOR(obj)
+        SI obj ES instancia DE Component ENTONCES
+            ASIGNAR this.obj = obj
+        SINO SI obj ES instancia DE EtiquetaTexto ENTONCES
+            ASIGNAR this.obj = EtiquetaTextoAdapter(obj)
+        SINO
+            ASIGNAR this.obj = NULO
+        FIN SI
 
-    def __init__(self):
-        if Render._instance is not None:
-            raise Exception("Esta clase es Singleton. Usa getInstance()")
-        Render._instance = self
+    MÉTODO getEntradaFormada()
+        SI obj NO ES NULO ENTONCES
+            RETORNAR obj.render()
+        SINO
+            RETORNAR "<!-- componente no compatible -->"
+        FIN SI
 
-    @staticmethod
-    def getInstance():
-        if Render._instance is None:
-            Render()
-        return Render._instance
+CLASE EtiquetaTexto
+    MÉTODO generar_etiqueta()
+        RETORNAR "<label> </label>"
 
-    def render_html(self, contenido):
-        return f"<html><body><form>{contenido}</form></body></html>"
+CLASE EtiquetaTextoAdapter IMPLEMENTA Component
+    ATRIBUTO etiqueta_texto
 
-// =============================
-// Aplicación principal para ejecutar la composición
-// =============================
+    CONSTRUCTOR(etiqueta_texto)
+        ASIGNAR this.etiqueta_texto = etiqueta_texto
 
-CLASS Application:
-    MÉTODO estático main():
+    MÉTODO render()
+        RETORNAR etiqueta_texto.generar_etiqueta()
 
-        boton = NUEVO Button()
-        input = NUEVO InputText()
-        select = NUEVO Select()
+---------------------------------------
+PATRÓN SINGLETON
+---------------------------------------
+CLASE Render
+    ATRIBUTO ESTÁTICO _instance = NULO
 
-        radio = NUEVO InputTypeDecorator(input)
+    CONSTRUCTOR()
+        SI Render._instance NO ES NULO ENTONCES
+            LANZAR ERROR "Esta clase es Singleton. Usa getInstance()"
+        FIN SI
+        ASIGNAR Render._instance = this
 
-        formulario = NUEVO Formulario()
-        formulario.add_component(input)
-        formulario.add_component(select)
-        formulario.add_component(boton)
-        formulario.add_component(radio)
+    MÉTODO ESTÁTICO getInstance()
+        SI Render._instance ES NULO ENTONCES
+            CREAR nueva instancia Render()
+        FIN SI
+        RETORNAR Render._instance
 
-        adaptador = NUEVO SalidaAdapter(formulario)
+    MÉTODO render_html(contenido)
+        RETORNAR "<html><body><form>" + contenido + "</form></body></html>"
+
+---------------------------------------
+APLICACIÓN PRINCIPAL
+---------------------------------------
+CLASE Application
+    MÉTODO ESTÁTICO main()
+
+        etiqueta_externa = NUEVA EtiquetaTexto()
+        adaptador_etiqueta = NUEVO EtiquetaTextoAdapter(etiqueta_externa)
+
+        formulario_principal = NUEVO Formulario()
+
+        formulario_anidado = NUEVO Formulario()
+        formulario_anidado.add_component(NUEVO Button())
+        formulario_anidado.add_component(NUEVO InputText())
+        formulario_anidado.add_component(adaptador_etiqueta)
+
+        formulario_principal.add_component(formulario_anidado)
+        formulario_principal.add_component(NUEVO Select())
+        formulario_principal.add_component(NUEVO InputText())
+
+        adaptador = NUEVO SalidaAdapter(formulario_principal)
         salida_html = adaptador.getEntradaFormada()
 
         render = Render.getInstance()
         html_completo = render.render_html(salida_html)
 
-        RETURN html_completo
+        RETORNAR html_completo
+
+FIN CLASE
 
 IMPRIMIR Application.main()

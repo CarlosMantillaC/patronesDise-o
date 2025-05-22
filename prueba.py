@@ -4,7 +4,6 @@ class Component(ABC):
     @abstractmethod
     def render(self):
         pass
-
 class Button(Component):
     def render(self):
         return "<button> </button>"
@@ -20,7 +19,6 @@ class Select(Component):
 # ==============================
 # PATRÓN DECORATOR
 # ==============================
-
 class TypeDecorator(Component):
     def __init__(self, component):
         self.component = component
@@ -34,49 +32,60 @@ class InputTypeDecorator(TypeDecorator):
 
     def render(self):
         html = self.component.render()
-        html = html.replace("<input", f'<input type="radio"')
+        html = html.replace("<input", '<input type="radio"')
         return html
-    
 
 # ==============================
 # PATRÓN COMPOSITE
 # ==============================
-
-class SalidaBuilder(ABC):
-    @abstractmethod
-    def get_components(self):
-        pass
-    
-class Formulario(SalidaBuilder):
+class Formulario(Component):  # Composite
     def __init__(self):
         self.components = []
 
     def add_component(self, comp):
         self.components.append(comp)
 
-    def get_components(self):
-        return self.components
-
+    def render(self):
+        html = ""
+        for comp in self.components:
+            html += comp.render()
+        return f"<div>{html}</div>"
 
 # ==============================
 # PATRÓN ADAPTER
 # ==============================
-
 class SalidaAdapter:
-    def __init__(self, form: SalidaBuilder):
-        self.form = form
+    def __init__(self, obj):
+        # Convertir a Component si es necesario
+        if isinstance(obj, Component):
+            self.obj = obj
+        elif isinstance(obj, EtiquetaTexto):
+            self.obj = EtiquetaTextoAdapter(obj)
+        else:
+            self.obj = None
 
     def getEntradaFormada(self):
-        html = ""
-        for comp in self.form.get_components():
-            html += comp.render()
-        return html
+        if self.obj:
+            return self.obj.render()
+        else:
+            return "<!-- componente no compatible -->"
 
+# Componente externo no compatible originalmente
+class EtiquetaTexto:
+    def generar_etiqueta(self):
+        return f"<label> </label>"
+
+# Adaptador para EtiquetaTexto
+class EtiquetaTextoAdapter(Component):
+    def __init__(self, etiqueta_texto):
+        self.etiqueta_texto = etiqueta_texto
+
+    def render(self):
+        return self.etiqueta_texto.generar_etiqueta()
 
 # ==============================
 # PATRÓN SINGLETON
 # ==============================
-
 class Render:
     _instance = None
 
@@ -94,38 +103,39 @@ class Render:
     def render_html(self, contenido):
         return f"<html><body><form>{contenido}</form></body></html>"
 
-
 # ==============================
 # APLICACIÓN PRINCIPAL
 # ==============================
-
 class Application:
     @staticmethod
     def main():
-        # Crear componentes
-        boton = Button()
 
-        input = InputText()
-        select = Select()
-        radio = InputTypeDecorator(input)
+        # Componente externo + adaptador
+        etiqueta_externa = EtiquetaTexto()
+        adaptador_etiqueta = EtiquetaTextoAdapter(etiqueta_externa)
+        # Crear formulario principal
+        formulario_principal = Formulario()
 
-        # Crear formulario y agregar componentes
-        formulario = Formulario()
-        formulario.add_component(input)
-        formulario.add_component(select)
-        formulario.add_component(boton)
-        formulario.add_component(radio)
+        # Crear formulario anidado
+        formulario_anidado = Formulario()
+        formulario_anidado.add_component(Button())
+        formulario_anidado.add_component(InputText())
+        formulario_anidado.add_component(adaptador_etiqueta)
 
-        # Adaptar para salida HTML
-        adaptador = SalidaAdapter(formulario)
+        # Agregar formulario anidado dentro del principal
+        formulario_principal.add_component(formulario_anidado)
+
+        # Agregar componentes simples al formulario principal
+        formulario_principal.add_component(Select())
+        formulario_principal.add_component(InputText())
+
+        # Usar el adaptador y render singleton como antes
+        adaptador = SalidaAdapter(formulario_principal)
         salida_html = adaptador.getEntradaFormada()
 
-        # Renderizar
         render = Render.getInstance()
         html_completo = render.render_html(salida_html)
-
         return html_completo
 
-
-# Ejecutar
+# Ejecutar aplicación
 print(Application.main())
