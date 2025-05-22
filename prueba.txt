@@ -1,39 +1,113 @@
-ContenedorFormulario(): InterfazEtiquetas
+INTERFACE Component:
+    METHOD render()
 
-    hijos = [InterfazEtiquetas]
+CLASS Button IMPLEMENTS Component:
+    METHOD render():
+        RETURN "<button> </button>"
 
-    método agregar(componente: InterfazEtiquetas):
-        hijos.agregar(componente)
+CLASS Select IMPLEMENTS Component:
+    METHOD render():
+        RETURN "<select> </select>"
 
-    método render():
-        contenedor = ""
-        para cada hijo en hijos:
-            contenedor += hijo.render()
-        return <div> contenedor </div>
---------------------------------------------------------------------------------
+CLASS InputText IMPLEMENTS Component:
+    METHOD render():
+        RETURN "<input />"
 
-div1 = ContenedorFormulario()
+# ==============================
+# PATRÓN ADAPATER
+# ==============================
 
-input1 = new Input
-boton1 = new Boton
+class TypeDecorator(Component):
+    def __init__(self, component):
+        self.component = component
 
-div1.agregar(input1)
-div1.agregar(boton1)
+    def render(self):
+        return self.component.render()
+    
+class InputTypeDecorator(TypeDecorator):
+    def __init__(self, component):
+        super().__init__(component)
 
-print(div1.render())
-----------------------------------------------------------------------------
+    def render(self):
+        html = self.component.render()
+        html = html.replace("<input", f'<input type="radio"')
+        return html
 
-div2 = ContenedorFormulario()
+// =============================
+// Patrón Composite
+// =============================
 
-div3 = ContenedorFormulario()
+INTERFACE SalidaBuilder:
+    METHOD get_components()
 
-input2 = new Input
-boton2 = new Boton
-select1 = new Select
+CLASS Formulario IMPLEMENTS SalidaBuilder:
+    ATTRIBUTE components : [Component]
 
-div3.agregar(input2)
-div3.agregar(boton2)
-div3.agregar(select1)
+    METHOD add_component(comp):
+        self.components.append(comp)
 
-div2.agregar(div3)
+    METHOD get_components():
+        RETURN components
 
+// =============================
+// Patrón Adapter
+// =============================
+
+CLASS SalidaAdapter:
+    ATTRIBUTE form : SalidaBuilder
+
+    def getEntradaFormada():
+        html = ""
+        for comp in form.get_components():
+            html += comp.render()
+        return html
+
+// =============================
+// Patrón Singleton
+// =============================
+
+class Render:
+    _instance = None
+
+    def __init__(self):
+        if Render._instance is not None:
+            raise Exception("Esta clase es Singleton. Usa getInstance()")
+        Render._instance = self
+
+    @staticmethod
+    def getInstance():
+        if Render._instance is None:
+            Render()
+        return Render._instance
+
+    def render_html(self, contenido):
+        return f"<html><body><form>{contenido}</form></body></html>"
+
+// =============================
+// Aplicación principal para ejecutar la composición
+// =============================
+
+CLASS Application:
+    MÉTODO estático main():
+
+        boton = NUEVO Button()
+        input = NUEVO InputText()
+        select = NUEVO Select()
+
+        radio = NUEVO InputTypeDecorator(input)
+
+        formulario = NUEVO Formulario()
+        formulario.add_component(input)
+        formulario.add_component(select)
+        formulario.add_component(boton)
+        formulario.add_component(radio)
+
+        adaptador = NUEVO SalidaAdapter(formulario)
+        salida_html = adaptador.getEntradaFormada()
+
+        render = Render.getInstance()
+        html_completo = render.render_html(salida_html)
+
+        RETURN html_completo
+
+IMPRIMIR Application.main()
