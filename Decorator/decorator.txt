@@ -1,3 +1,16 @@
+*/ Categoría: Estructural
+Propósito: Añadir responsabilidades adicionales a un objeto dinámicamente, sin afectar a otros objetos.
+Cómo funciona:
+
+El decorador tiene la misma interfaz que el objeto original y contiene una referencia a ese objeto.
+
+Extiende o modifica el comportamiento.
+Ejemplo:
+Agregar funcionalidades extras a una ventana gráfica como bordes o barras de scroll 
+sin modificar la clase original.
+*/
+
+
  // 1. Interfaz o clase base
 interfaz Bebida {
     metodo obtenerDescripcion(): Texto

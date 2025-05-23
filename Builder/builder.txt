@@ -1,0 +1,100 @@
+/*
+Categoría: Creacional
+Propósito: Separar la construcción de un objeto complejo de su 
+representación para que el mismo proceso pueda crear diferentes representaciones.
+Cómo funciona:
+
+El director guía la construcción paso a paso.
+
+El builder construye cada parte del objeto.
+Ejemplo:
+Construcción de un vehículo que puede tener distintas configuraciones: 
+coche deportivo, coche familiar, etc.
+*/
+
+
+// 1. Interfaz base
+interfaz ComponenteHTML {
+    metodo mostrar(): Texto
+}
+
+// 2. Componentes concretos que implementan la interfaz
+clase Select implements ComponenteHTML {
+    metodo mostrar(): Texto {
+        retornar "<select>Mostrar</select>"
+    }
+}
+
+clase Button implements ComponenteHTML {
+    metodo mostrar(): Texto {
+        retornar "<button>Mostrar</button>"
+    }
+}
+
+clase Checkbox implements ComponenteHTML {
+    metodo mostrar(): Texto {
+        retornar "<input type='checkbox' /> Mostrar"
+    }
+}
+
+// 3. Clase Builder para construir un formulario HTML
+clase Builder {
+    propiedad nombresComponentes: Lista<Texto> = []
+
+    metodo agregar(nombre: Texto): Builder {
+        nombresComponentes.agregar(nombre)
+        retornar this
+    }
+
+    metodo build(): Form {
+        variable html = ""
+
+        para cada nombre en nombresComponentes {
+            si nombre == "select" {
+                html += new Select().mostrar()
+            }
+            sino si nombre == "button" {
+                html += new Button().mostrar()
+            }
+            sino si nombre == "checkbox" {
+                html += new Checkbox().mostrar()
+            }
+            sino {
+                imprimir "⚠️ Componente no válido: '" + nombre + "'"
+                continuar
+            }
+        }
+
+        retornar new Form(html)
+    }
+}
+
+// 4. Clase Form que representa el resultado construido
+clase Form {
+    propiedad html: Texto
+
+    constructor(html: Texto) {
+        this.html = html
+    }
+
+    metodo render(): Texto {
+        retornar html
+    }
+}
+
+// 5. Uso del Builder
+form = new Builder()
+    .agregar("select")
+    .agregar("button")
+    .agregar("checkbox")
+    .build()
+
+form2 = new Builder()
+    .agregar("select")
+    .agregar("button")
+    .agregar("checkbox")
+    .build()
+
+// 6. Mostrar resultados
+imprimir form.render()
+imprimir form2.render()

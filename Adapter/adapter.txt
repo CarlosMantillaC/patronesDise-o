@@ -1,0 +1,46 @@
+/*
+Categoría: Estructural
+Propósito: Convertir la interfaz de una clase en otra que el cliente espera. 
+Permite que clases incompatibles trabajen juntas.
+Cómo funciona:
+
+El adaptador envuelve una clase existente y traduce llamadas entre la interfaz esperada y la real.
+Ejemplo:
+Un lector de tarjetas que solo acepta tarjetas con una interfaz específica, 
+pero tienes tarjetas con otra interfaz.
+*/
+
+// 1. Interfaz esperada por el cliente
+interfaz EnchufeEuropeo {
+    metodo conectarRedEuropea(): void
+}
+
+// 2. Clase existente con una interfaz incompatible
+clase EnchufeAmericano {
+    metodo conectarRedAmericana(): void {
+        imprimir "Conectado a red americana (110V)"
+    }
+}
+
+// 3. Adaptador que traduce de una interfaz a otra
+clase AdaptadorAmericanoAEuropeo implements EnchufeEuropeo {
+    propiedad enchufeAmericano: EnchufeAmericano
+
+    constructor(enchufeAmericano: EnchufeAmericano) {
+        this.enchufeAmericano = enchufeAmericano
+    }
+
+    metodo conectarRedEuropea(): void {
+        imprimir "Adaptador convierte de 220V a 110V..."
+        enchufeAmericano.conectarRedAmericana()
+    }
+}
+
+// Enchufe que solo entiende red americana
+enchufeUSA = new EnchufeAmericano()
+
+// Adaptador que lo hace compatible con red europea
+adaptador = new AdaptadorAmericanoAEuropeo(enchufeUSA)
+
+// Cliente usa enchufe europeo, pero en realidad es uno americano adaptado
+adaptador.conectarRedEuropea()

@@ -1,0 +1,58 @@
+/*
+Categoría: Estructural
+Propósito: Componer objetos en estructuras de árbol para representar jerarquías parte-todo. 
+Permite tratar objetos individuales y compuestos de forma uniforme.
+Cómo funciona:
+
+Los componentes pueden ser hojas (elementos simples) o composites (colecciones de componentes).
+
+Se puede llamar el mismo método sobre ambos.
+Ejemplo:
+Sistema de archivos donde un directorio contiene archivos o subdirectorios.
+*/
+
+
+// Componente base
+interfaz Componente {
+    metodo operar()
+}
+
+// Hoja (Leaf)
+clase Hoja implements Componente {
+    metodo operar() {
+        imprimir "Operación en hoja"
+    }
+}
+
+// Compuesto (Composite)
+clase Compuesto implements Componente {
+    propiedad hijos: Lista<Componente>
+
+    constructor() {
+        hijos = nueva Lista<Componente>()
+    }
+
+    metodo agregar(c: Componente) {
+        hijos.agregar(c)
+    }
+
+    metodo operar() {
+        imprimir "Operación en compuesto"
+        para cada hijo en hijos {
+            hijo.operar()
+        }
+    }
+}
+
+hoja1 = new Hoja()
+hoja2 = new Hoja()
+
+compuesto1 = new Compuesto()
+compuesto1.agregar(hoja1)
+compuesto1.agregar(hoja2)
+
+raiz = new Compuesto()
+raiz.agregar(compuesto1)
+raiz.agregar(new Hoja())
+
+raiz.operar()
