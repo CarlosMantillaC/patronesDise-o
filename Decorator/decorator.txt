@@ -1,0 +1,49 @@
+ // 1. Interfaz o clase base
+interfaz Bebida {
+    metodo obtenerDescripcion(): Texto
+    metodo obtenerCosto(): Número
+}
+
+// 2. Clase concreta
+clase Cafe implements Bebida {
+    metodo obtenerDescripcion() {
+        retornar "Café"
+    }
+
+    metodo obtenerCosto() {
+        retornar 5.0
+    }
+}
+
+// 3. Decoradores concretos (sin heredar de un decorador base)
+clase Leche implements Bebida {
+    propiedad bebida: Bebida
+
+    constructor(bebida: Bebida) {
+        this.bebida = bebida
+    }
+
+    metodo obtenerDescripcion() {
+        retornar bebida.obtenerDescripcion() + ", con leche"
+    }
+
+    metodo obtenerCosto() {
+        retornar bebida.obtenerCosto() + 1.0
+    }
+}
+
+clase Chocolate implements Bebida {
+    propiedad bebida: Bebida
+
+    constructor(bebida: Bebida) {
+        this.bebida = bebida
+    }
+
+    metodo obtenerDescripcion() {
+        retornar bebida.obtenerDescripcion() + ", con chocolate"
+    }
+
+    metodo obtenerCosto() {
+        retornar bebida.obtenerCosto() + 1.5
+    }
+}
