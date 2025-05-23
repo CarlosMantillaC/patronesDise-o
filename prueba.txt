@@ -16,39 +16,40 @@ CLASE Select IMPLEMENTA Component
 ---------------------------------------
 PATRÓN DECORATOR
 ---------------------------------------
-CLASE TypeDecorator IMPLEMENTA Component
-    ATRIBUTO component
 
-    CONSTRUCTOR(component)
-        ASIGNAR this.component = component
-
-    MÉTODO render()
-        RETORNAR component.render()
-
-CLASE InputTypeDecorator EXTENDIENDO TypeDecorator
+CLASE InputTypeDecorator EXTENDIENDO InputText
     CONSTRUCTOR(component)
         LLAMAR super CONSTRUCTOR con component
 
     MÉTODO render()
-        html = component.render()
-        REEMPLAZAR "<input" POR '<input type="radio"' EN html
-        RETORNAR html
+        renderComp = component.render()
+        REEMPLAZAR "<input" POR '<input type="radio"' EN renderComp
+        RETORNAR renderComp
 
 ---------------------------------------
 PATRÓN COMPOSITE
 ---------------------------------------
-CLASE Formulario IMPLEMENTA Component
+CLASE FormBody IMPLEMENTA Component
     ATRIBUTO components (lista vacía)
 
     MÉTODO add_component(comp)
         AGREGAR comp A components
 
     MÉTODO render()
-        html = ""
+        FormBody = ""
         PARA cada comp EN components
-            html = html + comp.render()
+            FormBody = FormBody + comp.render()
         FIN PARA
-        RETORNAR "<div>" + html + "</div>"
+        RETORNAR "<div>" + FormBody + "</div>"
+
+CLASE Formulario IMPLEMENTA Component
+    ATRIBUTO body (instancia de FormBody)
+
+    CONSTRUCTOR(body)
+        ASIGNAR this.body = body
+
+    MÉTODO render()
+        RETORNAR "<form>" + this.body.render() + "</form>"
 
 ---------------------------------------
 PATRÓN ADAPTER
@@ -89,51 +90,44 @@ CLASE EtiquetaTextoAdapter IMPLEMENTA Component
 PATRÓN SINGLETON
 ---------------------------------------
 CLASE Render
-    ATRIBUTO ESTÁTICO _instance = NULO
+    ATRIBUTO ESTÁTICO instance = NULO
 
     CONSTRUCTOR()
-        SI Render._instance NO ES NULO ENTONCES
-            LANZAR ERROR "Esta clase es Singleton. Usa getInstance()"
+        SI Render.instance NO ES NULO ENTONCES
+            LANZAR ERROR
         FIN SI
-        ASIGNAR Render._instance = this
+        ASIGNAR Render.instance = this
 
     MÉTODO ESTÁTICO getInstance()
-        SI Render._instance ES NULO ENTONCES
+        SI Render.instance ES NULO ENTONCES
             CREAR nueva instancia Render()
         FIN SI
-        RETORNAR Render._instance
+        RETORNAR Render.instance
 
-    MÉTODO render_html(contenido)
-        RETORNAR "<html><body><form>" + contenido + "</form></body></html>"
+    MÉTODO render_html(lista_de_formularios)
+        contenido_forms = ""
+        PARA cada form EN lista_de_formularios
+            contenido_forms = contenido_forms + form.render()
+        FIN PARA
+        RETORNAR "<html><body>" + contenido_forms + "</body></html>"
 
 ---------------------------------------
 APLICACIÓN PRINCIPAL
 ---------------------------------------
-CLASE Application
-    MÉTODO ESTÁTICO main()
+form_body1 = NUEVO FormBody()
+form_body1.add_component(NUEVO Button())
+form_body1.add_component(NUEVO InputTypeDecorator(NUEVO InputText()))
 
-        etiqueta_externa = NUEVA EtiquetaTexto()
-        adaptador_etiqueta = NUEVO EtiquetaTextoAdapter(etiqueta_externa)
+form_body2 = NUEVO FormBody()
+form_body2.add_component(NUEVO Select())
+form_body2.add_component(NUEVO SalidaAdapter(NUEVO EtiquetaTexto()))
 
-        formulario_principal = NUEVO Formulario()
+form1 = NUEVO Formulario(form_body1)
+form2 = NUEVO Formulario(form_body2)
 
-        formulario_anidado = NUEVO Formulario()
-        formulario_anidado.add_component(NUEVO Button())
-        formulario_anidado.add_component(NUEVO InputText())
-        formulario_anidado.add_component(adaptador_etiqueta)
+pagina = Render.getInstance()
+html_final = pagina.render_html([form1, form2])
 
-        formulario_principal.add_component(formulario_anidado)
-        formulario_principal.add_component(NUEVO Select())
-        formulario_principal.add_component(NUEVO InputText())
+IMPRIMIR html_final
 
-        adaptador = NUEVO SalidaAdapter(formulario_principal)
-        salida_html = adaptador.getEntradaFormada()
 
-        render = Render.getInstance()
-        html_completo = render.render_html(salida_html)
-
-        RETORNAR html_completo
-
-FIN CLASE
-
-IMPRIMIR Application.main()

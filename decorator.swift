@@ -11,6 +11,7 @@ class ComponenteConcreto: Componente {
 }
 
 // Clase decoradora abstracta
+/*
 class Decorador: Componente {
     private var componente: Componente
     
@@ -22,20 +23,31 @@ class Decorador: Componente {
         return componente.operacion()
     }
 }
+*/
+class DecoradorConcretoA: Componente {
+    private var componente: Componente
 
-// Decorador concreto A
-class DecoradorConcretoA: Decorador {
-    override func operacion() -> String {
-        return "Comportamiento A añadido a (\(super.operacion()))"
+    init(_ componente: Componente) {
+        self.componente = componente
+    }
+
+    func operacion() -> String {
+        return "Comportamiento A añadido a (\(componente.operacion()))"
     }
 }
 
-// Decorador concreto B
-class DecoradorConcretoB: Decorador {
-    override func operacion() -> String {
-        return "Comportamiento B añadido a (\(super.operacion()))"
+class DecoradorConcretoA: Componente {
+    private var componente: Componente
+
+    init(_ componente: Componente) {
+        self.componente = componente
+    }
+
+    func operacion() -> String {
+        return "Comportamiento B añadido a (\(componente.operacion()))"
     }
 }
+
 
 // Ejemplo de uso
 func ejemploDecorator() {
