@@ -43,3 +43,12 @@ func perform (fn: (Int, Int) -> Int, a: Int, b: Int) -> Int {
 
 let resultado4 = perform(fn: multiply, a:3, b:4)
 print(resultado4)
+
+func saludar(nombre: String?) {
+    guard let nombreSeguro = nombre else {
+        print("No hay nombre")
+        return
+    }
+    print("Hola, \(nombreSeguro)")
+}
+saludar(nombre: "Carlos")

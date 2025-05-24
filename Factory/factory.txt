@@ -1,0 +1,57 @@
+/*
+Categoría: Creacional
+Propósito: Definir una interfaz para crear un objeto, pero dejar que las 
+subclases decidan qué clase instanciar.
+Cómo funciona:
+
+Una clase base declara un método para crear objetos, pero la implementación 
+concreta de este método está en las subclases.
+
+Permite delegar la creación de objetos a las subclases.
+Ejemplo:
+Una aplicación gráfica que crea botones para diferentes sistemas operativos 
+(Windows, Mac), donde cada sistema crea un botón con estilo propio.
+*/
+
+// 1. Interfaz de acciones comunes de los juguetes
+interfaz JuguetesAcciones {
+    metodo encender(): void
+}
+
+// 2. Clase base
+clase Juguete { }
+
+// 3. Clases concretas
+clase Carro extiende Juguete implementa JuguetesAcciones {
+    metodo encender() {
+        imprimir "El carro se ha encendido"
+    }
+}
+
+clase Muñeca extiende Juguete implementa JuguetesAcciones {
+    metodo encender() {
+        imprimir "La muñeca se ha encendido"
+    }
+}
+
+// 4. Fábrica de juguetes
+funcion factoryJuguetes(tipo: Texto): JuguetesAcciones? {
+    si tipo == "carro" {
+        retornar new Carro()
+    } sino si tipo == "muñeca" {
+        retornar new Muñeca()
+    }
+    retornar nulo
+}
+
+// 5. Uso del patrón Factory
+variable juguete1 = factoryJuguetes("carro")
+si juguete1 != nulo {
+    juguete1.encender()
+}
+
+variable juguete2 = factoryJuguetes("muñeca")
+si juguete2 != nulo {
+    juguete2.encender()
+}
+

@@ -24,7 +24,7 @@ func factoryJuguetes(tipo: String) -> JuguetesAcciones? {
         return Muñeca()
     }
     return nil
-}
+} 
 
 if let carro = factoryJuguetes(tipo: "carro") {
     carro.encender()

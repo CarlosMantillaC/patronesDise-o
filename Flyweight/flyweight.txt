@@ -1,0 +1,61 @@
+/*
+Categoría: Estructural
+Propósito: Usar el compartir para soportar grandes cantidades de objetos de 
+manera eficiente en memoria.
+Cómo funciona:
+
+Divide el estado del objeto en interno (compartido) y externo (no compartido).
+
+Reutiliza objetos compartidos cuando es posible.
+Ejemplo:
+Un editor de texto que comparte objetos de carácter para cada letra que aparece.
+*/
+
+
+// 1. Clase Flyweight: Circulo
+clase Circulo {
+    propiedad color: Texto
+
+    constructor(color) {
+        this.color = color
+    }
+
+    metodo dibujar(x: Entero, y: Entero, radio: Entero) {
+        imprimir "Dibujando un círculo " + color + " en (" + x + ", " + y + ") 
+        con radio " + radio
+    }
+}
+
+// 2. Fabrica que maneja el pool de objetos Circulo
+clase FabricaCirculos {
+    propiedad circulos: Diccionario<String, Circulo>
+
+    constructor() {
+        circulos = Diccionario vacío
+    }
+
+    metodo obtenerCirculo(color: Texto) {
+        si circulos.contiene(color) {
+            retornar circulos[color]
+        } sino {
+            nuevoCirculo = new Circulo(color)
+            circulos[color] = nuevoCirculo
+            retornar nuevoCirculo
+        }
+    }
+}
+
+// 3. Uso del patrón Flyweight
+fabrica = new FabricaCirculos()
+
+rojo1 = fabrica.obtenerCirculo("Rojo")
+rojo1.dibujar(10, 20, 5)
+
+rojo2 = fabrica.obtenerCirculo("Rojo")
+rojo2.dibujar(15, 25, 10)
+
+azul = fabrica.obtenerCirculo("Azul")
+azul.dibujar(30, 40, 7)
+
+// Verificar que rojo1 y rojo2 son el mismo objeto (referencia compartida)
+imprimir (rojo1 == rojo2)  // true o sí

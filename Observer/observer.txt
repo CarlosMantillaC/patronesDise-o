@@ -1,0 +1,65 @@
+/*
+Categoría: Comportamental
+Propósito: Definir una dependencia uno a muchos entre objetos para que cuando uno cambie, 
+todos sus dependientes sean notificados y actualizados automáticamente.
+Cómo funciona:
+
+Un sujeto mantiene una lista de observadores.
+
+Cuando el sujeto cambia, notifica a todos.
+Ejemplo:
+Un sistema de notificaciones donde varios módulos escuchan cambios.
+*/
+
+// Interfaz del Observador
+INTERFAZ Notificador:
+    MÉTODO notificar(mensaje)
+
+// Observador concreto: Email
+CLASE EmailNotificador IMPLEMENTA Notificador:
+    ATRIBUTO nombreUsuario
+
+    MÉTODO constructor(nombre):
+        nombreUsuario ← nombre
+
+    MÉTODO notificar(mensaje):
+        IMPRIMIR "[EMAIL] Notificación a " + nombreUsuario + ": " + mensaje
+
+// Observador concreto: SMS
+CLASE SmsNotificador IMPLEMENTA Notificador:
+    ATRIBUTO nombreUsuario
+
+    MÉTODO constructor(nombre):
+        nombreUsuario ← nombre
+
+    MÉTODO notificar(mensaje):
+        IMPRIMIR "[SMS] Notificación a " + nombreUsuario + ": " + mensaje
+
+// Sujeto observado
+CLASE CanalYouTube:
+    ATRIBUTO nombre
+    ATRIBUTO suscriptores ← lista vacía
+
+    MÉTODO constructor(nombreCanal):
+        nombre ← nombreCanal
+
+    MÉTODO agregarSuscriptor(notificador):
+        AÑADIR notificador A suscriptores
+
+    MÉTODO subirVideo(titulo):
+        IMPRIMIR "[" + nombre + "] Nuevo video subido: " + titulo
+        PARA CADA sub EN suscriptores:
+            sub.notificar("Nuevo video: " + titulo)
+
+
+// --- EJECUCIÓN PRINCIPAL ---
+
+canal ← CanalYouTube("TechMind")
+
+email1 ← EmailNotificador("Ana")
+sms1 ← SmsNotificador("Luis")
+
+canal.agregarSuscriptor(email1)
+canal.agregarSuscriptor(sms1)
+
+canal.subirVideo("Observer Pattern en Swift")

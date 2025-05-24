@@ -1,0 +1,91 @@
+/*
+Categoría: Comportamental
+Propósito: Proporcionar una manera de acceder secuencialmente a los elementos de un agregado sin exponer su representación interna.
+Cómo funciona:
+
+El objeto iterable devuelve un iterador.
+
+El iterador tiene métodos para obtener el siguiente elemento y verificar si hay más.
+Ejemplo:
+Recorrer una lista sin exponer cómo está almacenada.
+*/
+
+// 1. Definir interfaz Iterador genérico
+interfaz Iterador {
+    metodo hayMas(): Booleano
+    metodo siguiente(): Objeto o nulo
+}
+
+// 2. Clase Libro (igual)
+clase Libro {
+    propiedad titulo: Texto
+
+    constructor(titulo) {
+        this.titulo = titulo
+    }
+
+    metodo getTitulo() {
+        retornar this.titulo
+    }
+}
+
+// 3. Clase Biblioteca (igual)
+clase Biblioteca {
+    propiedad libros: Lista<Libro>
+
+    constructor() {
+        libros = lista vacía
+    }
+
+    metodo agregarLibro(libro: Libro) {
+        libros.agregar(libro)
+    }
+
+    metodo contarLibros() {
+        retornar libros.tamaño()
+    }
+
+    metodo getLibroEn(posicion: Entero) {
+        retornar libros[posicion]
+    }
+}
+
+// 4. Clase BibliotecaIterator implementa Iterador
+clase BibliotecaIterator implementa Iterador {
+    propiedad biblioteca: Biblioteca
+    propiedad posicionActual: Entero
+
+    constructor(biblioteca) {
+        this.biblioteca = biblioteca
+        this.posicionActual = 0
+    }
+
+    metodo hayMas() {
+        retornar posicionActual < biblioteca.contarLibros()
+    }
+
+    metodo siguiente() {
+        si hayMas() {
+            libro = biblioteca.getLibroEn(posicionActual)
+            posicionActual = posicionActual + 1
+            retornar libro
+        } sino {
+            retornar nulo
+        }
+    }
+}
+
+// 5. Uso
+biblioteca = new Biblioteca()
+biblioteca.agregarLibro(new Libro("El Quijote"))
+biblioteca.agregarLibro(new Libro("Cien años de soledad"))
+biblioteca.agregarLibro(new Libro("Crónica de una muerte anunciada"))
+
+iterador: Iterador = new BibliotecaIterator(biblioteca)
+
+mientras iterador.hayMas() {
+    libro = iterador.siguiente()
+    si libro != nulo {
+        imprimir libro.getTitulo()
+    }
+}
