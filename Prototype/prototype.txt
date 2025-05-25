@@ -1,0 +1,74 @@
+/*
+Categoría: Creacional
+Propósito: Crear nuevos objetos copiando un prototipo existente en lugar de 
+crear objetos desde cero.
+Cómo funciona:
+
+El objeto a copiar tiene un método clonar que devuelve una copia exacta.
+
+Reduce el costo de crear objetos complejos.
+Ejemplo:
+Clonar documentos con contenido similar.
+*/
+
+//Interfaz Prototype
+interfaz Prototipo {
+    metodo clonar(): Prototipo
+}
+
+//Clases concretas
+clase Guerrero implementa Prototipo {
+    propiedad nombre
+    propiedad nivel
+    propiedad arma
+
+    constructor(nombre, nivel, arma) {
+        this.nombre = nombre
+        this.nivel = nivel
+        this.arma = arma
+    }
+
+    metodo clonar() {
+        retornar new Guerrero(this.nombre, this.nivel, this.arma)
+    }
+
+    metodo mostrar() {
+        imprimir "Guerrero: " + nombre + ", Nivel: " + nivel + ", Arma: " + arma
+    }
+}
+
+clase Mago implementa Prototipo {
+    propiedad nombre
+    propiedad mana
+    propiedad hechizo
+
+    constructor(nombre, mana, hechizo) {
+        this.nombre = nombre
+        this.mana = mana
+        this.hechizo = hechizo
+    }
+
+    metodo clonar() {
+        retornar new Mago(this.nombre, this.mana, this.hechizo)
+    }
+
+    metodo mostrar() {
+        imprimir "Mago: " + nombre + ", Maná: " + mana + ", Hechizo: " + hechizo
+    }
+}
+
+//Uso del patron
+guerreroOriginal = new Guerrero("Arthas", 10, "Espada")
+magoOriginal = new Mago("Merlín", 100, "Bola de fuego")
+
+guerreroClonado = guerreroOriginal.clonar()
+magoClonado = magoOriginal.clonar()
+
+guerreroClonado.nombre = "Lancelot"
+magoClonado.nombre = "Gandalf"
+
+guerreroOriginal.mostrar()   // Guerrero: Arthas, Nivel: 10, Arma: Espada
+guerreroClonado.mostrar()    // Guerrero: Lancelot, Nivel: 10, Arma: Espada
+
+magoOriginal.mostrar()       // Mago: Merlín, Maná: 100, Hechizo: Bola de fuego
+magoClonado.mostrar()        // Mago: Gandalf, Maná: 100, Hechizo: Bola de fuego

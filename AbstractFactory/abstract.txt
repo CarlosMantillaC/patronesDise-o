@@ -1,0 +1,105 @@
+/*
+Categoría: Creacional
+Propósito: Proveer una interfaz para crear familias de objetos relacionados 
+sin especificar sus clases concretas.
+Cómo funciona:
+
+Se crea una fábrica abstracta con métodos para crear distintos productos.
+
+Cada fábrica concreta implementa esos métodos para crear productos relacionados.
+Ejemplo:
+Un sistema que crea interfaces gráficas para distintas plataformas, donde una 
+fábrica crea botones, menús y ventanas para Windows, y otra para Mac.
+*/
+
+//Interfaces de productos
+interfaz Boton {
+    metodo dibujar()
+}
+
+interfaz Checkbox {
+    metodo dibujar()
+}
+
+//Productos concretos para tema claro
+clase BotonClaro implementa Boton {
+    metodo dibujar() {
+        imprimir "Dibujando botón claro"
+    }
+}
+
+clase CheckboxClaro implementa Checkbox {
+    metodo dibujar() {
+        imprimir "Dibujando checkbox claro"
+    }
+}
+
+//Prdocutos concretos para tema oscuro
+clase BotonOscuro implementa Boton {
+    metodo dibujar() {
+        imprimir "Dibujando botón oscuro"
+    }
+}
+
+clase CheckboxOscuro implementa Checkbox {
+    metodo dibujar() {
+        imprimir "Dibujando checkbox oscuro"
+    }
+}
+
+//Fabrica Abstracta
+interfaz FabricaGUI {
+    metodo crearBoton(): Boton
+    metodo crearCheckbox(): Checkbox
+}
+
+//Fabricas Concretas
+clase FabricaTemaClaro implementa FabricaGUI {
+    metodo crearBoton() {
+        retornar new BotonClaro()
+    }
+
+    metodo crearCheckbox() {
+        retornar new CheckboxClaro()
+    }
+}
+
+clase FabricaTemaOscuro implementa FabricaGUI {
+    metodo crearBoton() {
+        retornar new BotonOscuro()
+    }
+
+    metodo crearCheckbox() {
+        retornar new CheckboxOscuro()
+    }
+}
+
+//Cliente que usa la fabrica
+clase Aplicacion {
+    propiedad boton: Boton
+    propiedad checkbox: Checkbox
+
+    constructor(fabrica: FabricaGUI) {
+        this.boton = fabrica.crearBoton()
+        this.checkbox = fabrica.crearCheckbox()
+    }
+
+    metodo dibujarInterfaz() {
+        boton.dibujar()
+        checkbox.dibujar()
+    }
+}
+
+//Uso del patron
+funcion main() {
+    temaUsuario = "oscuro"  // o "claro"
+    
+    si temaUsuario == "claro" {
+        fabrica = new FabricaTemaClaro()
+    } sino {
+        fabrica = new FabricaTemaOscuro()
+    }
+
+    app = new Aplicacion(fabrica)
+    app.dibujarInterfaz()
+}

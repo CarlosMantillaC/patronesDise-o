@@ -1,0 +1,88 @@
+/*
+Categoría: Estructural
+Propósito: Separar la abstracción de su implementación para que ambas 
+puedan variar independientemente.
+Cómo funciona:
+
+Hay dos jerarquías: una para la abstracción, otra para la implementación.
+
+La abstracción mantiene una referencia a la implementación.
+El puente es la referencia a la implementación desde la abstracción
+
+Ejemplo:
+Un control remoto (abstracción) que puede funcionar con diferentes tipos de 
+dispositivos (implementación).
+*/
+
+
+//Implementador
+interfaz Dispositivo {
+    metodo encender()
+    metodo apagar()
+    metodo cambiarCanal(canal: Entero)
+}
+
+//Implementaciones concretas
+clase Televisor implementa Dispositivo {
+    metodo encender() {
+        imprimir "Televisor encendido"
+    }
+
+    metodo apagar() {
+        imprimir "Televisor apagado"
+    }
+
+    metodo cambiarCanal(canal) {
+        imprimir "Televisor cambia al canal " + canal
+    }
+}
+
+clase Radio implementa Dispositivo {
+    metodo encender() {
+        imprimir "Radio encendida"
+    }
+
+    metodo apagar() {
+        imprimir "Radio apagada"
+    }
+
+    metodo cambiarCanal(canal) {
+        imprimir "Radio cambia a la frecuencia " + canal
+    }
+}
+
+//Abstraccion
+clase ControlRemoto {
+    propiedad dispositivo: Dispositivo
+
+    constructor(dispositivo: Dispositivo) {
+        this.dispositivo = dispositivo
+    }
+
+    metodo encender() {
+        dispositivo.encender()
+    }
+
+    metodo apagar() {
+        dispositivo.apagar()
+    }
+
+    metodo cambiarCanal(canal) {
+        dispositivo.cambiarCanal(canal)
+    }
+}
+
+//Uso del patron
+tv = new Televisor()
+radio = new Radio()
+
+controlTv = new ControlRemoto(tv)
+controlRadio = new ControlRemoto(radio)
+
+controlTv.encender()
+controlTv.cambiarCanal(5)
+controlTv.apagar()
+
+controlRadio.encender()
+controlRadio.cambiarCanal(101)
+controlRadio.apagar()

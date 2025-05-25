@@ -1,0 +1,89 @@
+/*
+El patrón Visitor permite agregar operaciones a una estructura de objetos sin modificar sus clases. 
+Se usa cuando tienes una estructura de objetos compleja y necesitas realizar distintas operaciones 
+sobre sus elementos, sin romper el principio de abierto/cerrado.
+
+Agrega nuevas operaciones sin modificar las clases existentes.
+
+Separa lógica de negocio de estructura de datos.
+
+Facilita el mantenimiento de código en jerarquías complejas.
+*/
+
+//Interfaz del Visitor
+interface FiguraVisitor {
+    metodo visitarCirculo(circulo: Circulo)
+    metodo visitarRectangulo(rectangulo: Rectangulo)
+}
+
+//Interfaz de elementos que aceptan un Visitor
+interface Figura {
+    metodo aceptar(visitor: FiguraVisitor)
+}
+
+//Clases concretas de elementos
+clase Circulo implements Figura {
+    propiedad radio: Decimal
+
+    constructor(radio: Decimal) {
+        this.radio = radio
+    }
+
+    metodo aceptar(visitor: FiguraVisitor) {
+        visitor.visitarCirculo(this)
+    }
+}
+
+clase Rectangulo implements Figura {
+    propiedad ancho: Decimal
+    propiedad alto: Decimal
+
+    constructor(ancho: Decimal, alto: Decimal) {
+        this.ancho = ancho
+        this.alto = alto
+    }
+
+    metodo aceptar(visitor: FiguraVisitor) {
+        visitor.visitarRectangulo(this)
+    }
+}
+
+
+//Visitor Concreto: Dibujo
+clase DibujarFiguraVisitor implements FiguraVisitor {
+    metodo visitarCirculo(circulo: Circulo) {
+        imprimir "Dibujando un círculo con radio: \(circulo.radio)"
+    }
+
+    metodo visitarRectangulo(rectangulo: Rectangulo) {
+        imprimir "Dibujando un rectángulo de \(rectangulo.ancho) x \(rectangulo.alto)"
+    }
+}
+
+//Visitor Concreto: Cálculo de área: 
+clase CalcularAreaVisitor implements FiguraVisitor {
+
+    metodo visitarCirculo(circulo: Circulo) {
+        area = 3.14 * (circulo.radio * circulo.radio)
+        imprimir "Área del círculo: \(area)"
+    }
+
+    metodo visitarRectangulo(rectangulo: Rectangulo) {
+        area = rectangulo.ancho * rectangulo.alto
+        imprimir "Área del rectángulo: \(area)"
+    }
+}
+
+//Uso del patron
+figuras: Lista de Figura = [
+    new Circulo(radio: 5),
+    new Rectangulo(ancho: 3, alto: 4)
+]
+
+visitorDibujo = new DibujarFiguraVisitor()
+visitorArea = new CalcularAreaVisitor()
+
+para cada figura en figuras {
+    figura.aceptar(visitorDibujo)
+    figura.aceptar(visitorArea)
+}

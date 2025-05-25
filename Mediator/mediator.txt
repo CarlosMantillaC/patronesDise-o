@@ -1,0 +1,73 @@
+/*
+Categoría: Comportamental
+Propósito: Definir un objeto que encapsula cómo interactúan un conjunto de objetos, 
+promoviendo un bajo acoplamiento.
+Cómo funciona:
+
+Los objetos no se comunican directamente, sino a través del mediador.
+Ejemplo:
+Un sistema de chat donde el mediador gestiona la comunicación entre usuarios.
+*/
+
+//Interfaz del Mediador
+interface ChatMediator {
+    metodo enviarMensaje(mensaje: String, emisor: Usuario)
+}
+
+//Clase concreta del mediador
+clase ChatSala implements ChatMediator {
+    propiedad usuarios: Lista de Usuario
+
+    constructor() {
+        this.usuarios = []
+    }
+
+    metodo agregarUsuario(usuario: Usuario) {
+        this.usuarios.agregar(usuario)
+    }
+
+    metodo enviarMensaje(mensaje: String, emisor: Usuario) {
+        para cada usuario en usuarios {
+            si usuario != emisor {
+                usuario.recibirMensaje(mensaje)
+            }
+        }
+    }
+}
+
+//Clase Usuario (Colegas)
+clase Usuario {
+    propiedad nombre: String
+    propiedad mediador: ChatMediator
+
+    constructor(nombre: String, mediador: ChatMediator) {
+        this.nombre = nombre
+        this.mediador = mediador
+    }
+
+    metodo enviarMensaje(mensaje: String) {
+        imprimir "[\(nombre)] envía: \(mensaje)"
+        mediador.enviarMensaje(mensaje, emisor: this)
+    }
+
+    metodo recibirMensaje(mensaje: String) {
+        imprimir "[\(nombre)] recibe: \(mensaje)"
+    }
+}
+
+//Uso del patron
+sala = new ChatSala()
+
+usuario1 = new Usuario("Ana", sala)
+usuario2 = new Usuario("Luis", sala)
+usuario3 = new Usuario("Marta", sala)
+
+sala.agregarUsuario(usuario1)
+sala.agregarUsuario(usuario2)
+sala.agregarUsuario(usuario3)
+
+usuario1.enviarMensaje("Hola a todos!")  
+// Luis y Marta reciben el mensaje
+
+usuario2.enviarMensaje("Hola Ana!")
+// Ana y Marta reciben el mensaje
