@@ -1,62 +1,47 @@
-*/ Categoría: Estructural
-Propósito: Añadir responsabilidades adicionales a un objeto dinámicamente, sin afectar a otros objetos.
-Cómo funciona:
-
-El decorador tiene la misma interfaz que el objeto original y contiene una referencia a ese objeto.
-
+/*
+Categoria: Estructural
+Proposito: Añadir responsabilidades adicionales a un objeto dinamicamente,
+sin afectar a otros objetos.
+Como funciona:
+El decorador tiene la misma interfaz que el objeto original y contiene una referencia
+a ese objeto.
 Extiende o modifica el comportamiento.
-Ejemplo:
-Agregar funcionalidades extras a una ventana gráfica como bordes o barras de scroll 
-sin modificar la clase original.
 */
 
+//interfaz base
+interfaz Bebida:
+    metodo obtenerDescripcion()
+    metodo obtenerCosto()
 
- // 1. Interfaz o clase base
-interfaz Bebida {
-    metodo obtenerDescripcion(): Texto
-    metodo obtenerCosto(): Número
-}
 
-// 2. Clase concreta
-clase Cafe implements Bebida {
-    metodo obtenerDescripcion() {
-        retornar "Café"
-    }
+//Clase concreta
+clase Cafe implementa Bebida:
+    metodo obtenerDescripcion():
+        imprimir "Cafe"
+    
+    metodo obtenerCosto():
+        imprimir 5
 
-    metodo obtenerCosto() {
-        retornar 5.0
-    }
-}
 
-// 3. Decoradores concretos (sin heredar de un decorador base)
-clase Leche implements Bebida {
-    propiedad bebida: Bebida
-
-    constructor(bebida: Bebida) {
+//Decoradores concretos
+clase Leche implementa Bebida:
+    constructor(bebida: Bebida):
         this.bebida = bebida
-    }
+    
+    metodo obtenerDescripcion():
+        imprimir bebida.obtenerDescripcion() + "con leche"
 
-    metodo obtenerDescripcion() {
-        retornar bebida.obtenerDescripcion() + ", con leche"
-    }
+    metodo obtenerCosto():
+        imprimir bebida.obtenerCosto() + 1
 
-    metodo obtenerCosto() {
-        retornar bebida.obtenerCosto() + 1.0
-    }
-}
 
-clase Chocolate implements Bebida {
-    propiedad bebida: Bebida
+//Uso del patron
+bebidaBase = new Cafe()
 
-    constructor(bebida: Bebida) {
-        this.bebida = bebida
-    }
+bebidaConLeche = new Leche(bebidaBase)
 
-    metodo obtenerDescripcion() {
-        retornar bebida.obtenerDescripcion() + ", con chocolate"
-    }
+descripcion = bebidaConLeche.obtenerDescripcion()
+costo = bebidaConLeche.obtenerCosto()
 
-    metodo obtenerCosto() {
-        retornar bebida.obtenerCosto() + 1.5
-    }
-}
+imprimir descripcion
+imprimir costo

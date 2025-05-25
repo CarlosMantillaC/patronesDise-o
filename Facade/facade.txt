@@ -1,82 +1,52 @@
 /*
 Categoría: Estructural
-Propósito: Proveer una interfaz simplificada a un conjunto de interfaces 
-en un subsistema.
-Cómo funciona:
-
-La fachada envuelve las llamadas a las clases complejas y simplifica la 
-interacción.
+Proposito: Proveer un metodo o conjunto de metodos para simplificar un conjunto 
+de clases/metodos complicados.
+Como funciona:
+La fachada envuelve las llamadas a las clases complejas y simplificar la
+interaccion.
 Ejemplo:
-Una API simplificada para controlar un sistema multimedia complejo.
+Una API  simplificada para controlar un sistema multimedia complejo.
 */
 
 //Subsistemas individuales
-clase Luces {
-    metodo encender() {
+clase Luces:
+    metodo encender():
         imprimir "Luces encendidas"
-    }
-
-    metodo atenuar() {
-        imprimir "Luces atenuadas para la película"
-    }
-}
-
-clase ReproductorDVD {
-    metodo encender() {
+    
+clase ReproductorDVD:
+    metodo encender():
         imprimir "Reproductor de DVD encendido"
-    }
 
-    metodo reproducir(pelicula) {
+    metodo reproducir(pelicula):
         imprimir "Reproduciendo: " + pelicula
-    }
-}
 
-clase Proyector {
-    metodo encender() {
+clase Proyector:
+    metodo encender():
         imprimir "Proyector encendido"
-    }
 
-    metodo modoCine() {
-        imprimir "Proyector en modo cine"
-    }
-}
-
-clase SistemaSonido {
-    metodo encender() {
+clase SistemaSonido:
+    metodo encender():
         imprimir "Sistema de sonido encendido"
-    }
 
-    metodo subirVolumen() {
-        imprimir "Volumen ajustado para la película"
-    }
-}
 
 //Fachada
-clase SistemaCineEnCasa {
-    propiedad luces: Luces
-    propiedad dvd: ReproductorDVD
-    propiedad proyector: Proyector
-    propiedad sonido: SistemaSonido
-
-    constructor() {
+clase SistemaCineEnCasa:    
+    constructor():
         luces = new Luces()
         dvd = new ReproductorDVD()
         proyector = new Proyector()
         sonido = new SistemaSonido()
-    }
 
-    metodo verPelicula(nombrePelicula) {
-        imprimir "Preparando para ver la película..."
-        luces.atenuar()
+    metodo verPelicula(nombrePelicula):
+        imprimir "Preparando para ver la pelicula..."
+        luces.encender()
         proyector.encender()
-        proyector.modoCine()
         sonido.encender()
-        sonido.subirVolumen()
         dvd.encender()
         dvd.reproducir(nombrePelicula)
-    }
-}
+
 
 //Uso del patron
 cine = new SistemaCineEnCasa()
-cine.verPelicula("El Señor de los Anillos")
+cine.verPelicula("Harry Potter")

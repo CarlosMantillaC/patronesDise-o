@@ -1,24 +1,20 @@
 /*
-Categoría: Creacional
-Propósito: Separar la construcción de un objeto complejo de su 
-representación para que el mismo proceso pueda crear diferentes representaciones.
-Cómo funciona:
-
-El director guía la construcción paso a paso.
-
-El builder construye cada parte del objeto.
+Categoria: Creacional
+Proposito: Separar la construccion de un objeto complejo de su 
+representacion para que el mismo proceso pueda crear diferentes representaciones.
+Como funciona:
+El director guia la construccion paso a paso
+El builder construye cada parte del objeto
 Ejemplo:
-Construcción de un vehículo que puede tener distintas configuraciones: 
+Construccion de un vehiculo que puede tener distintas configuraciones:
 coche deportivo, coche familiar, etc.
 */
 
+//Interfaz base
+interfaz ComponenteHTML:
+    metodo mostrar()
 
-// 1. Interfaz base
-interfaz ComponenteHTML {
-    metodo mostrar(): Texto
-}
-
-// 2. Componentes concretos que implementan la interfaz
+//Componentes concretos
 clase Select implements ComponenteHTML {
     metodo mostrar(): Texto {
         retornar "<select>Mostrar</select>"
@@ -37,64 +33,44 @@ clase Checkbox implements ComponenteHTML {
     }
 }
 
-// 3. Clase Builder para construir un formulario HTML
-clase Builder {
-    propiedad nombresComponentes: Lista<Texto> = []
+//clase builder para construir un formulario HTML
+clase Builder:
+    nombresComponentes: []
 
-    metodo agregar(nombre: Texto): Builder {
+    metodo agregar(nombre):
         nombresComponentes.agregar(nombre)
-        retornar this
-    }
+        return this //retorna el objeto completo
 
-    metodo build(): Form {
+    metodo buid():
         variable html = ""
 
-        para cada nombre en nombresComponentes {
-            si nombre == "select" {
-                html += new Select().mostrar()
-            }
-            sino si nombre == "button" {
-                html += new Button().mostrar()
-            }
-            sino si nombre == "checkbox" {
-                html += new Checkbox().mostrar()
-            }
-            sino {
+        para cada nombre en nombresComponentes:
+            si nombre == "select": 
+                html += new Select.mostrar()
+            sino si nombre == "checkbox":
+                html += new Checkbox.mostrar()
+            sino si nombre == "button":
+                html += new Button.mostrar()
+            sino:
                 imprimir "⚠️ Componente no válido: '" + nombre + "'"
-                continuar
-            }
-        }
+        
+        return new Form(html)
 
-        retornar new Form(html)
-    }
-}
-
-// 4. Clase Form que representa el resultado construido
-clase Form {
-    propiedad html: Texto
-
-    constructor(html: Texto) {
+//clase Form que representa el resultado construido
+clase Form:
+    
+    constructor(html):
         this.html = html
-    }
+    
+    metodo render():
+        return html
 
-    metodo render(): Texto {
-        retornar html
-    }
-}
 
-// 5. Uso del Builder
+//Uso del Builder
 form = new Builder()
-    .agregar("select")
-    .agregar("button")
-    .agregar("checkbox")
-    .build()
+form.agregar("Select")
+form.agregar("Button")
+form.build()
 
-form2 = new Builder()
-    .agregar("select")
-    .agregar("button")
-    .agregar("checkbox")
-    .build()
-
-// 6. Mostrar resultados
 imprimir form.render()
-imprimir form2.render()
+

@@ -1,88 +1,57 @@
 /*
-Categoría: Estructural
-Propósito: Separar la abstracción de su implementación para que ambas 
+Categoria: Estructural
+Proposito: Separar la abstraccion de su implementacion para que ambas
 puedan variar independientemente.
-Cómo funciona:
-
-Hay dos jerarquías: una para la abstracción, otra para la implementación.
-
-La abstracción mantiene una referencia a la implementación.
-El puente es la referencia a la implementación desde la abstracción
-
-Ejemplo:
-Un control remoto (abstracción) que puede funcionar con diferentes tipos de 
-dispositivos (implementación).
+Como funciona:
+Hay dos jerarquias: una para la abstraccion, otra para la implementacion.
+La abstraccion mantiene una referencia a la implementacion.
+El puente es la referencia a la implementacion desde la abstraccion.
+Ejemplo: Un control remoto (abstraccion) que puede funcionar con diferentes
+dispositivos (implementacion).
 */
 
-
 //Implementador
-interfaz Dispositivo {
+interfaz Dispositivo:
     metodo encender()
     metodo apagar()
-    metodo cambiarCanal(canal: Entero)
-}
 
 //Implementaciones concretas
-clase Televisor implementa Dispositivo {
-    metodo encender() {
+clase Televisor implementa Dispositivo:
+    metodo encender():
         imprimir "Televisor encendido"
-    }
 
-    metodo apagar() {
+    metodo apagar():
         imprimir "Televisor apagado"
-    }
 
-    metodo cambiarCanal(canal) {
-        imprimir "Televisor cambia al canal " + canal
-    }
-}
+clase Radio implementa Dispositivo:
+    metodo encender():
+        imprimir "Radio encendido"
 
-clase Radio implementa Dispositivo {
-    metodo encender() {
-        imprimir "Radio encendida"
-    }
+    metodo apagar():
+        imprimir "Radio apagado"
 
-    metodo apagar() {
-        imprimir "Radio apagada"
-    }
-
-    metodo cambiarCanal(canal) {
-        imprimir "Radio cambia a la frecuencia " + canal
-    }
-}
 
 //Abstraccion
-clase ControlRemoto {
-    propiedad dispositivo: Dispositivo
-
-    constructor(dispositivo: Dispositivo) {
+clase ControlRemoto:
+    constructor(dispositivo: Dispositivo):
         this.dispositivo = dispositivo
-    }
 
-    metodo encender() {
+    metodo encender():
         dispositivo.encender()
-    }
-
-    metodo apagar() {
+    
+    metodo apagar():
         dispositivo.apagar()
-    }
 
-    metodo cambiarCanal(canal) {
-        dispositivo.cambiarCanal(canal)
-    }
-}
 
 //Uso del patron
 tv = new Televisor()
 radio = new Radio()
 
-controlTv = new ControlRemoto(tv)
-controlRadio = new ControlRemoto(radio)
+controlTV = ControlRemoto(tv)
+controlRadio = ControlRemoto(radio)
 
-controlTv.encender()
-controlTv.cambiarCanal(5)
-controlTv.apagar()
+controlTV.encender()
+controlTV.apagar()
 
 controlRadio.encender()
-controlRadio.cambiarCanal(101)
 controlRadio.apagar()

@@ -1,87 +1,69 @@
 /*
-Categoría: Comportamental
-Propósito: Permitir pasar una solicitud a lo largo de una cadena de objetos hasta que alguno la maneje.
-Cómo funciona:
-
+Categoria: Comportamental
+Proposito: Permitir pasar una solicitud a lo largo de una cadena de objetos
+hasta que alguno la maneje.
+Como funciona:
 Cada objeto en la cadena decide si procesa la solicitud o la pasa al siguiente.
 Ejemplo:
 Filtros de autorización en un servidor web.
 */
 
-// 1. Interfaz del manejador
-interfaz ManejarMonto {
-    propiedad siguiente: ManejarMonto
-    metodo autorizar(monto: Número)
-    metodo pasarSiguiente(monto: Número)
-}
+//Interfaz del manejador
+interfaz ManejarMonto:
+    atributo siguiente
+    metodo autorizar()
+    metodo pasarSiguiente()
 
-// 2. Clase concreta: Empleado
-clase Empleado implementa ManejarMonto {
-    propiedad siguiente: ManejarMonto
+//Clases concretas
+clase Empleado implementa ManejarMonto:
+    siguiente: ManejarMonto
 
-    metodo autorizar(monto) {
-        si monto <= 1000 {
-            imprimir "✅ Monto de " + monto + " autorizado por el empleado."
-        } sino {
+    metodo Autorizar(monto):
+        si monto <= 1000:
+            imprimir "Monto autorizado por el empleado"
+        sino:
             pasarSiguiente(monto)
-        }
-    }
-
-    metodo pasarSiguiente(monto) {
-        imprimir "➡️ El empleado pasa el monto de " + monto + " al supervisor."
-        si siguiente != nulo {
+    
+    metodo pasarSiguiente(monto):
+        imprimir "El empleado pasa el monto al supervisor"
+        si siguiente != nulo:
             siguiente.autorizar(monto)
-        }
-    }
-}
+    
+clase Supervisor implementa ManejarMonto:
+    siguiente: ManejarMonto
 
-// 3. Clase concreta: Supervisor
-clase Supervisor implementa ManejarMonto {
-    propiedad siguiente: ManejarMonto
-
-    metodo autorizar(monto) {
-        si monto <= 5000 {
-            imprimir "✅ Monto de " + monto + " autorizado por el supervisor."
-        } sino {
+    metodo autorizar(monto):
+        si monto <= 10000:
+            imprimir "Monto autorizado por el supervisor"
+        sino:
             pasarSiguiente(monto)
-        }
-    }
 
-    metodo pasarSiguiente(monto) {
-        imprimir "➡️ El supervisor pasa el monto de " + monto + " al gerente."
-        si siguiente != nulo {
+    metodo pasarSiguiente(monto):
+        imprimir "El supervisor pasa el monto al gerente"
+        si siguiente != nulo:
             siguiente.autorizar(monto)
-        }
-    }
-}
 
-// 4. Clase concreta: Gerente
-clase Gerente implementa ManejarMonto {
-    propiedad siguiente: ManejarMonto = nulo
+clase Gerente implementa ManejarMonto:
+    siguiente: ManejarMonto
 
-    metodo autorizar(monto) {
-        si monto <= 10000 {
-            imprimir "✅ Monto de " + monto + " autorizado por el gerente."
-        } sino {
+    metodo autorizar(monto):
+        si monto <= 100000:
+            imprimir "Monto autorizado por el gerente"
+        sino:
             pasarSiguiente(monto)
-        }
-    }
+    
+    metodo pasarSiguiente(monto):
+        imprimir "Monto imposible de autorizar"
 
-    metodo pasarSiguiente(monto) {
-        imprimir "❌ Monto de " + monto + " no puede ser autorizado por nadie."
-    }
-}
 
-// Crear instancias
+//Uso del patron
 empleado = new Empleado()
 supervisor = new Supervisor()
 gerente = new Gerente()
 
-// Encadenar responsabilidades
 empleado.siguiente = supervisor
 supervisor.siguiente = gerente
 
-// Probar autorizaciones
 empleado.autorizar(700)       // → autorizado por empleado
 empleado.autorizar(3000)      // → pasa a supervisor, autorizado
 empleado.autorizar(7500)      // → pasa a supervisor → gerente, autorizado

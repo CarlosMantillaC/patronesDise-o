@@ -1,71 +1,54 @@
 /*
-Categoría: Comportamental
-Propósito: Encapsular una solicitud como un objeto, permitiendo parametrizar clientes con 
+Categoria: Comportamental
+Proposito: Encapsular una solicitud como un objeto, permitiendo parametrizar clientes con
 diferentes solicitudes, ponerlas en cola o deshacer operaciones.
-Cómo funciona:
-
-El comando implementa una interfaz que tiene un método ejecutar.
-
+Como funciona:
+El comando implementa una interfaz que tiene un metodo ejectuar.
 Se puede almacenar, pasar y ejecutar posteriormente.
 Ejemplo:
-Desacopla el emisor del comando (el botón) del receptor real (la luz).
-Como un botón configurable de una app: tú decides qué comando ejecutar sin modificar el botón.
+Desacopla el emisor del comando (el boton) del receptor real (la luz).
+Como un boton configurable de una app: tu decides que comando ejecutar sin modificar el boton.
 */
 
-//Interfaz Comando
-interface Comando {
+//interfaz Comando
+interface Comando:
     metodo ejecutar()
-}
 
-//Receptores (los objetos que realmente hacen el trabajo)
-clase Luz {
-    metodo encender() {
-        imprimir "La luz está encendida"
-    }
 
-    metodo apagar() {
-        imprimir "La luz está apagada"
-    }
-}
+//receptores (los objetos que realmente hacen el trabajo)
+clase Luz:
+    metodo encender():
+        imprimir "La luz esta encendida"
+    
+    metodo apagar():
+        imprimir "La luz esta apagada"
 
 
 //Comandos Concretos
-clase ComandoEncenderLuz implements Comando {
-    propiedad luz: Luz
-
-    constructor(luz: Luz) {
+clase ComandoEncenderLuz implementa Comando:
+    constructor(luz: Luz):
         this.luz = luz
-    }
-
-    metodo ejecutar() {
+    
+    metodo ejectuar():
         this.luz.encender()
-    }
-}
 
-clase ComandoApagarLuz implements Comando {
-    propiedad luz: Luz
-
-    constructor(luz: Luz) {
+clase ComandoApagarLuz implementa Comando:
+    constructor (luz: Luz):
         this.luz = luz
-    }
 
-    metodo ejecutar() {
+    metodo ejecutar():
         this.luz.apagar()
-    }
-}
+
 
 //Invocador (el que ejecuta el comando)
-clase ControlRemoto {
-    propiedad boton: Comando
+clase ControlRemoto:
+    boton: Comando
 
-    metodo configurarBoton(comando: Comando) {
+    metodo configurarBoton(comando: Comando):
         this.boton = comando
-    }
-
-    metodo presionarBoton() {
-        this.boton.ejecutar()
-    }
-}
+    
+    metodo presionarBoton():
+        this.boton.ejectuar()
 
 
 //Uso del patron
@@ -77,7 +60,7 @@ comandoApagar = new ComandoApagarLuz(luz)
 control = new ControlRemoto()
 
 control.configurarBoton(comandoEncender)
-control.presionarBoton()  // La luz está encendida
+control.presionarBoton()
 
 control.configurarBoton(comandoApagar)
-control.presionarBoton()  // La luz está apagada
+control.presionarBoton()
