@@ -1,70 +1,55 @@
 /*
-Categoría: Comportamental
-Propósito: Capturar y externalizar el estado interno de un objeto sin violar la encapsulación, 
-para poder restaurarlo más tarde.
-Cómo funciona:
-
+Categoria: Comportamental
+Propósito: Capturar y externalizar el estado interno de un objeto
+sin violar la encapsulación, para poder restaurarlo mas tarde.
+Como funciona:
 El originador crea un memento que guarda su estado.
-
 El caretaker guarda el memento y puede pedir restaurar el estado.
 Ejemplo:
-Undo/redo en editores de texto.
+undo/redo en editores de texto
 */
 
-//Clase Memento: guarda el estado 
-clase Memento {
-    propiedad estado: String
 
-    constructor(estado: String) {
+//Clase memento: guarda el estado
+clase Memento:
+    
+    constructor(estado):
         this.estado = estado
-    }
+    
+    metodo obtenerEstado():
+        return this.estado
 
-    metodo getEstado() -> String {
-        retornar this.estado
-    }
-}
 
 //Clase originador: el objeto principal cuyo estado queremos guardar
-clase EditorTexto {
-    propiedad contenido: String
+clase EditorTexto:
 
-    constructor() {
+    constructor():
         this.contenido = ""
-    }
 
-    metodo escribir(texto: String) {
+    metodo escribir(texto):
         this.contenido += texto
-    }
-
-    metodo mostrar() {
+    
+    metodo mostrar():
         imprimir "Contenido actual: " + this.contenido
-    }
 
-    metodo crearMemento() -> Memento {
-        retornar new Memento(this.contenido)
-    }
+    metodo crearMemento():
+        return new Memento(this.contenido)
 
-    metodo restaurar(memento: Memento) {
-        this.contenido = memento.getEstado()
-    }
-}
+    metodo restaurar(memento: Memento):
+        this.contenido = memento.obtenerEstado()
 
-//Clase cuidador (Caretaker): guarda los mementos
-clase Historial {
-    propiedad cambios: Pila de Memento
 
-    constructor() {
-        this.cambios = nueva pila vacía
-    }
+//Clase cuidador (caretaker): guarda y deshace los mementos
+clase Historial:
 
-    metodo guardar(memento: Memento) {
-        this.cambios.apilar(memento)
-    }
+    constructor():
+        this.cambios = [Memento]
 
-    metodo deshacer() -> Memento {
-        retornar this.cambios.desapilar()
-    }
-}
+    metodo guardar(memento: Memento):
+        this.cambios.agregar(memento)
+
+    metodo deshacer():
+        return this.cambios.desapilar()
 
 
 //Uso del patron
@@ -74,7 +59,7 @@ historial = new Historial()
 editor.escribir("Hola")
 historial.guardar(editor.crearMemento())
 
-editor.escribir(" mundo")
+editor.escribir(" Mundo")
 historial.guardar(editor.crearMemento())
 
 editor.escribir(" cruel")

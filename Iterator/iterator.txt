@@ -1,91 +1,71 @@
 /*
 Categoría: Comportamental
-Propósito: Proporcionar una manera de acceder secuencialmente a los elementos de un agregado sin exponer su representación interna.
-Cómo funciona:
-
+Proposito: Proporcionar una manera de acceder secuencialmente a los elementos de un agregado
+sin exponer su representación interna.
+Como funciona:
 El objeto iterable devuelve un iterador.
-
-El iterador tiene métodos para obtener el siguiente elemento y verificar si hay más.
+El iterador tiene metodos para obtener el siguiente elemento.
 Ejemplo:
-Recorrer una lista sin exponer cómo está almacenada.
+Recorrer una lista sin exponer como esta almacenada
 */
 
-// 1. Definir interfaz Iterador genérico
-interfaz Iterador {
-    metodo hayMas(): Booleano
-    metodo siguiente(): Objeto o nulo
-}
+//Interfaz Iterador generico
+interfaz Iterador:
+    metodo hayMas()
+    metodo siguiente()
 
-// 2. Clase Libro (igual)
-clase Libro {
-    propiedad titulo: Texto
 
-    constructor(titulo) {
+//Clase libro
+clase Libro:
+    constructor(titulo):
         this.titulo = titulo
-    }
+    
+    metodo obtenerTitulo():
+        imprimir this.titulo
 
-    metodo getTitulo() {
-        retornar this.titulo
-    }
-}
 
-// 3. Clase Biblioteca (igual)
-clase Biblioteca {
-    propiedad libros: Lista<Libro>
-
-    constructor() {
-        libros = lista vacía
-    }
-
-    metodo agregarLibro(libro: Libro) {
+//Coleccion
+Clase Biblioteca:
+    constructor():
+        libros = []
+    
+    metodo agregarLibro(libro: Libro):
         libros.agregar(libro)
-    }
+    
+    metodo contarLibros():
+        return libros.tamaño()
 
-    metodo contarLibros() {
-        retornar libros.tamaño()
-    }
+    metodo obtenerPosicionLibro(posicion):
+        return libros[posicion]
 
-    metodo getLibroEn(posicion: Entero) {
-        retornar libros[posicion]
-    }
-}
-
-// 4. Clase BibliotecaIterator implementa Iterador
-clase BibliotecaIterator implementa Iterador {
-    propiedad biblioteca: Biblioteca
-    propiedad posicionActual: Entero
-
-    constructor(biblioteca) {
+    
+//Clase iterador para Biblioteca
+Clase BibliotecaIterator implementa Iterador:
+    constructor(biblioteca):
         this.biblioteca = biblioteca
         this.posicionActual = 0
-    }
 
-    metodo hayMas() {
-        retornar posicionActual < biblioteca.contarLibros()
-    }
+    metodo hayMas():
+        return posicionActual < biblioteca.contarLibros()
 
-    metodo siguiente() {
-        si hayMas() {
-            libro = biblioteca.getLibroEn(posicionActual)
+    metodo siguiente():
+        si hayMas():
+            libro = biblioteca.obtenerPosicionLibro(posicionActual)
             posicionActual = posicionActual + 1
-            retornar libro
-        } sino {
-            retornar nulo
-        }
-    }
-}
+            return libro
+        sino: 
+            return null
+    
 
-// 5. Uso
+//Uso del patron
 biblioteca = new Biblioteca()
 biblioteca.agregarLibro(new Libro("El Quijote"))
 biblioteca.agregarLibro(new Libro("Cien años de soledad"))
 biblioteca.agregarLibro(new Libro("Crónica de una muerte anunciada"))
 
-iterador: Iterador = new BibliotecaIterator(biblioteca)
+iterador = new BibliotecaIterator(biblioteca)
 
-mientras iterador.hayMas() {
+mientras iterador.hayMas():
     libro = iterador.siguiente()
-    si libro != nulo {
-        imprimir libro.getTitulo()
-    }
-}
+    si libro != nulo:
+        imprimir libro.obtenerTitulo()

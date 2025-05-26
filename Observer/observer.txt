@@ -3,61 +3,57 @@ Categoría: Comportamental
 Propósito: Definir una dependencia uno a muchos entre objetos para que cuando uno cambie, 
 todos sus dependientes sean notificados y actualizados automáticamente.
 Cómo funciona:
-
 Un sujeto mantiene una lista de observadores.
-
 Cuando el sujeto cambia, notifica a todos.
 Ejemplo:
 Un sistema de notificaciones donde varios módulos escuchan cambios.
 */
 
 // Interfaz del Observador
-INTERFAZ Notificador:
-    MÉTODO notificar(mensaje)
+interfaz Notificador:
+    metodo notificar()
 
-// Observador concreto: Email
-CLASE EmailNotificador IMPLEMENTA Notificador:
-    ATRIBUTO nombreUsuario
 
-    MÉTODO constructor(nombre):
-        nombreUsuario ← nombre
+// Observadores concretos
+clase EmailNotificador implementa Notificador:
 
-    MÉTODO notificar(mensaje):
-        IMPRIMIR "[EMAIL] Notificación a " + nombreUsuario + ": " + mensaje
+    constructor(nombre):
+        this.nombre = nombre
 
-// Observador concreto: SMS
-CLASE SmsNotificador IMPLEMENTA Notificador:
-    ATRIBUTO nombreUsuario
+    metodo notificar(mensaje):
+        imprimir "[EMAIL] Notificación a " + nombre + ": " + mensaje
 
-    MÉTODO constructor(nombre):
-        nombreUsuario ← nombre
+clase SmsNotificador implementa Notificador:
 
-    MÉTODO notificar(mensaje):
-        IMPRIMIR "[SMS] Notificación a " + nombreUsuario + ": " + mensaje
+    constructor(nombre):
+        this.nombre = nombre
+
+    metodo notificar(mensaje):
+        imprimir "[SMS] Notificación a " + nombre + ": " + mensaje
+
 
 // Sujeto observado
-CLASE CanalYouTube:
-    ATRIBUTO nombre
-    ATRIBUTO suscriptores ← lista vacía
+clase CanalYouTube:
 
-    MÉTODO constructor(nombreCanal):
-        nombre ← nombreCanal
+    metodo constructor(nombreCanal):
+        this.nombreCanal = nombreCanal
+        suscriptores = []
 
-    MÉTODO agregarSuscriptor(notificador):
-        AÑADIR notificador A suscriptores
+    metodo agregarSuscriptor(notificador):
+        añadir notificador A suscriptores
 
-    MÉTODO subirVideo(titulo):
-        IMPRIMIR "[" + nombre + "] Nuevo video subido: " + titulo
-        PARA CADA sub EN suscriptores:
+    metodo subirVideo(titulo):
+        imprimir "[" + nombreCanal + "] Nuevo video subido: " + titulo
+        para sub en suscriptores:
             sub.notificar("Nuevo video: " + titulo)
 
 
-// --- EJECUCIÓN PRINCIPAL ---
+//Uso del patron
 
-canal ← CanalYouTube("TechMind")
+canal = CanalYouTube("TechMind")
 
-email1 ← EmailNotificador("Ana")
-sms1 ← SmsNotificador("Luis")
+email1 = EmailNotificador("Ana")
+sms1 = SmsNotificador("Luis")
 
 canal.agregarSuscriptor(email1)
 canal.agregarSuscriptor(sms1)

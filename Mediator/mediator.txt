@@ -1,59 +1,47 @@
 /*
-Categoría: Comportamental
-Propósito: Definir un objeto que encapsula cómo interactúan un conjunto de objetos, 
+Categoria: Comportamental
+Proposito: Definir un objeto que encapsula como interactuan un conjunto de objetos,
 promoviendo un bajo acoplamiento.
-Cómo funciona:
-
-Los objetos no se comunican directamente, sino a través del mediador.
+Como funciona:
+Los objetos no se comunican directamente, sino a traves del mediador.
 Ejemplo:
 Un sistema de chat donde el mediador gestiona la comunicación entre usuarios.
 */
 
-//Interfaz del Mediador
-interface ChatMediator {
-    metodo enviarMensaje(mensaje: String, emisor: Usuario)
-}
+
+//Interfaz del mediador
+interface ChatMediator:
+    metodo enviarMensaje()
 
 //Clase concreta del mediador
-clase ChatSala implements ChatMediator {
-    propiedad usuarios: Lista de Usuario
+clase ChatSala implementa ChatMediator:
 
-    constructor() {
+    constructor():  
         this.usuarios = []
-    }
-
-    metodo agregarUsuario(usuario: Usuario) {
+    
+    metodo agregarUsuario(usuario: Usuario):
         this.usuarios.agregar(usuario)
-    }
 
-    metodo enviarMensaje(mensaje: String, emisor: Usuario) {
-        para cada usuario en usuarios {
-            si usuario != emisor {
+    metodo enviarMensaje(mensaje, emisor: Usuario):
+        para cada usuario en usuarios:
+            si usuario != emisor:
                 usuario.recibirMensaje(mensaje)
-            }
-        }
-    }
-}
+    
 
 //Clase Usuario (Colegas)
-clase Usuario {
-    propiedad nombre: String
-    propiedad mediador: ChatMediator
+Clase Usuario:
 
-    constructor(nombre: String, mediador: ChatMediator) {
+    constructor(nombre, mediador: ChatMediator):
         this.nombre = nombre
         this.mediador = mediador
-    }
 
-    metodo enviarMensaje(mensaje: String) {
-        imprimir "[\(nombre)] envía: \(mensaje)"
+    metodo enviarMensaje(mensaje):
+        imprimir nombre + "envia: " + mensaje
         mediador.enviarMensaje(mensaje, emisor: this)
-    }
+    
+    metodo recibirMensaje(mensaje):
+        imprimir nombre + "recibe: " + mensaje
 
-    metodo recibirMensaje(mensaje: String) {
-        imprimir "[\(nombre)] recibe: \(mensaje)"
-    }
-}
 
 //Uso del patron
 sala = new ChatSala()
@@ -71,3 +59,5 @@ usuario1.enviarMensaje("Hola a todos!")
 
 usuario2.enviarMensaje("Hola Ana!")
 // Ana y Marta reciben el mensaje
+
+    
