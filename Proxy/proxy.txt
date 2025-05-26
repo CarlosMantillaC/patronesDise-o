@@ -1,70 +1,52 @@
 /*
 Categoría: Estructural
-Propósito: Proveer un sustituto o representante de otro objeto para controlar 
-el acceso a este.
-Cómo funciona:
-
+Proposito: Proveer un sustituto o representante de otro objeto para controlar
+el acceso a este
+Como funciona:
 El proxy implementa la misma interfaz que el objeto real.
-Agrega lógica adicional antes, después o en lugar del objeto real
-
-Controla la creación, acceso o comunicación con el objeto real.
+Agrega logica adicional antes, despues o en lugar del objeto.
+Controla la creacion, acceso o comunicacion con el objeto real.
 Ejemplo:
 Proxy para acceder a un recurso remoto, o para añadir control de acceso.
 */
 
-//Interfaz Comun
-interface Video {
+
+//Interfaz comun
+interface video:
     metodo reproducir()
-}
 
-//Objeto Real
-clase VideoPrivado implements Video {
-    propiedad titulo: String
 
-    constructor(titulo) {
+//Objeto real
+clase VideoPrivado implementa Video:
+    
+    constructor(titulo):
         this.titulo = titulo
-    }
 
-    metodo reproducir() {
+    metodo reproducir():
         imprimir "Reproduciendo video: " + this.titulo
-    }
-}
+
 
 //Proxy (controla el acceso al objeto real)
-clase VideoProxy implements Video {
-    propiedad titulo: String
-    propiedad usuario: String
-    propiedad videoReal: VideoPrivado o null
-    propiedad usuariosPermitidos: Lista<String>
+clase VideoProxy implementa Video:
 
-    constructor(titulo, usuario) {
+    constructor(titulo, usuario):
         this.titulo = titulo
         this.usuario = usuario
         this.videoReal = null
-        this.usuariosPermitidos = ["admin", "ana", "luis"]
-    }
+        this.usuariosPermitidos = ["admin"]
 
-    metodo reproducir() {
-        si this.usuarioTienePermiso() {
-            si this.videoReal es null {
+    metodo reproducir():
+        si this.usuarioTienePermiso():
+            si this.videoReal es null:
                 this.videoReal = new VideoPrivado(this.titulo)
-            }
             this.videoReal.reproducir()
-        } sino {
+        sino:
             imprimir "Acceso denegado para el usuario: " + this.usuario
-        }
-    }
 
-    metodo usuarioTienePermiso() {
-        retornar this.usuariosPermitidos.contiene(this.usuario)
-    }
-}
+    metodo usuarioTienePermiso():
+        return this.usuariosPermitidos.contiene(this.usuario)
 
 
 //Uso del patron
-video1 = new VideoProxy("Curso de patrones", "admin")
+video1 = new VideoProxy("curso de patrones", "admin")
 video1.reproducir()
-
-video2 = new VideoProxy("Curso de patrones", "invitado")
-video2.reproducir()
- 

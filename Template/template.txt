@@ -1,50 +1,46 @@
 /*
-Categoría: Comportamental
-Propósito: Definir el esqueleto de un algoritmo en una operación, dejando algunos pasos a subclases. 
-Permite que las subclases redefinan ciertos pasos sin cambiar la estructura del algoritmo.
-Cómo funciona:
-
-La clase base define el método plantilla con pasos generales.
-
+Categoria: Comportamental
+Proposito: Definir el esqueleto de un algoritmo en una operación,
+dejando algunos pasos a subclases.
+Permite que las subclases redefinan ciertos pasos sin cambiar la
+estructura del algoritmo.
+Como funciona:
+La clase base define el metodo plantilla con pasos generales.
 Las subclases implementan los pasos específicos.
 Ejemplo:
-Algoritmo general para preparar una bebida, con pasos concretos para té o café.
+Algoritmo general para preparar una bebida, con pasos concretos para te o cafe.
 */
 
 //Clase abstracta con el metodo plantilla
-clase abstracta BebidaCaliente {
-    
-    metodo prepararBebida() {
+clase abstracta BebidaCaliente:
+
+    metodo prepararBebida():
         hervirAgua()
         agregarIngredientePrincipal()
         servirEnTaza()
-    }
 
-    metodo hervirAgua() {
+    metodo hervirAgua():
         imprimir "Hervir agua"
-    }
 
-    metodo servirEnTaza() {
+    metodo servirEnTaza():
         imprimir "Servir en taza"
-    }
 
     // Métodos que las subclases deben implementar
     metodo abstracto agregarIngredientePrincipal()
-}
+
 
 //Subclase: Té
-clase Te extends BebidaCaliente {
-    metodo agregarIngredientePrincipal() {
+clase Te extends BebidaCaliente:
+
+    metodo agregarIngredientePrincipal():
         imprimir "🍃 Añadir bolsita de té"
-    }
-}
 
 //Subclase: Café
-clase Cafe extends BebidaCaliente {
-    metodo agregarIngredientePrincipal() {
+clase Cafe extends BebidaCaliente:
+
+    metodo agregarIngredientePrincipal():
         imprimir "☕ Añadir café molido"
-    }
-}
+
 
 //Uso del patron
 bebida1 = new Te()

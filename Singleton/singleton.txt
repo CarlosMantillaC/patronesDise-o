@@ -1,46 +1,42 @@
 /*
 Categoría: Creacional
-Propósito: Garantizar que una clase tenga una única instancia 
+Proposito: Garantizar que una clase tenga una unica instancia
 y proporcionar un punto global de acceso a ella.
-Cómo funciona:
-
-La clase tiene un constructor privado para evitar que se creen nuevas instancias desde afuera.
-
-Posee un método estático que crea y devuelve la instancia única, si no existe, 
+Como funciona:
+La clase tiene un constructor privado para evitar que se creen nuevas
+instancias desde afuera.
+Posee un metodo estatico que crea y devuelve la instancia unica, si no existe,
 la crea; si existe, la retorna.
-
 Ejemplo:
-Una clase que maneja la configuración de una aplicación o conexión a base de datos, 
+Una clase que maneja la configuracion de una aplicacion o conexion a base de datos,
 donde solo debe existir una instancia.
 */
 
-clase GestorConfiguracion {
-    // 1. Variable estática que guarda la instancia única
-    propiedad estática instancia: GestorConfiguracion = nulo
 
-    // 2. Constructor privado (protegido para evitar creación externa)
-    privado constructor() {
+clase GestorConfiguracion:
+    //Variable estatica que guarda la instancia unica
+    propiedad estatica instancia: GestorConfiguracion = null
+
+    //Constructor privado (protegido para evitar creacion externa)
+    privado constructor():
         imprimir "Configuración cargada"
-    }
 
-    // 3. Método estático de acceso a la instancia única
-    metodo estático obtenerInstancia(): GestorConfiguracion {
-        si instancia == nulo {
+    //Metodo estatico de acceso a la instancia unica
+    metodo estatico obtenerInstancia():
+        si instancia == null:
             instancia = new GestorConfiguracion()
-        }
-        retornar instancia
-    }
+        return instancia
 
-    // 4. Métodos de ejemplo
-    metodo obtenerValor(clave: Texto): Texto {
-        retornar "Valor para " + clave
-    }
-}
+    //Metodo de ejemplo
+    metodo obtenerValor(clave):
+        imprimir "Valor para " + clave
 
+
+//Uso del patron
 config1 = GestorConfiguracion.obtenerInstancia()
 config2 = GestorConfiguracion.obtenerInstancia()
 
-imprimir config1 == config2    // true (ambas variables apuntan a la misma instancia)
+imprimir (config1 == config2) 
 
 valor = config1.obtenerValor("modo")
-imprimir valor
+imprimir valor  

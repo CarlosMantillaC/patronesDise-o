@@ -1,68 +1,48 @@
 /*
-Categoría: Comportamental
-Propósito: Definir una familia de algoritmos, encapsularlos y hacerlos 
-intercambiables. Permite que el algoritmo varie independientemente del cliente.
-Cómo funciona:
-
-Se define una interfaz común para todas las estrategias.
-
+Categoria: Comportamental
+Proposito: Definir una familia de algoritmos, encapsularlos y hacerlos
+intercambiables. Permite que el algoritmo varie independientemente.
+Como funciona:
+Se define una interfaz comun para todas las estrategias.
 El contexto utiliza una estrategia concreta.
 Ejemplo:
-Diferentes algoritmos de ordenamiento que se pueden usar según la necesidad
+Diferentes algoritmos de ordenamiento que se pueden usar segun la necesidad.
 */
 
+
 //Interfaz
-interfaz EstrategiaPago {
-    metodo pagar(monto: Decimal)
-}
+interfaz EstrategiaPago:
+    metodo pagar()
+
 
 //Estrategias Concretas
-clase PagoConTarjeta implementa EstrategiaPago {
-    metodo pagar(monto) {
-        imprimir "Pagando " + monto + " con tarjeta de crédito."
-    }
-}
+clase PagoConTarjetaCredito implementa EstrategiaPago:
 
-clase PagoConPaypal implementa EstrategiaPago {
-    metodo pagar(monto) {
-        imprimir "Pagando " + monto + " con PayPal."
-    }
-}
+    metodo pagar(monto):
+        imprimir "Pagando " + monto + " con tarjeta de credito"
 
-clase PagoEnEfectivo implementa EstrategiaPago {
-    metodo pagar(monto) {
+clase PagoEnEfectivo implementa EstrategiaPago:
+
+    metodo pagar(monto):
         imprimir "Pagando " + monto + " en efectivo."
-    }
-}
+
 
 //Contexto
-clase CarritoCompras {
-    propiedad estrategia: EstrategiaPago
+clase CarritoCompras:
 
-    metodo setEstrategia(estrategia: EstrategiaPago) {
+    constructor(estrategiaInicial: EstrategiaPago):
+        this.estrategia = estrategiaInicial
+
+    metodo setEstrategia(estrategia: EstrategiaPago):
         this.estrategia = estrategia
-    }
 
-    metodo procesarPago(monto: Decimal) {
-        if estrategia ≠ null {
-            estrategia.pagar(monto)
-        } else {
-            imprimir "No se ha definido una estrategia de pago."
-        }
-    }
-}
+    metodo procesarPago(monto):
+        this.estrategia.pagar(monto)
+
 
 //Uso del patron
-carrito = new CarritoCompras()
-
-carrito.setEstrategia(new PagoConTarjeta())
+carrito = new CarritoCompras(new PagoConTarjetaCredito())
 carrito.procesarPago(50.0)
-// Salida: Pagando 50.0 con tarjeta de crédito.
-
-carrito.setEstrategia(new PagoConPaypal())
-carrito.procesarPago(30.0)
-// Salida: Pagando 30.0 con PayPal.
 
 carrito.setEstrategia(new PagoEnEfectivo())
 carrito.procesarPago(20.0)
-// Salida: Pagando 20.0 en efectivo.
