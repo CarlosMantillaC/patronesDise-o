@@ -52,3 +52,25 @@ func saludar(nombre: String?) {
     print("Hola, \(nombreSeguro)")
 }
 saludar(nombre: "Carlos")
+
+
+struct Rectangulo {
+    var ancho: Double
+    var alto: Double
+
+    var area: Double {
+        get {
+            return ancho * alto
+        }
+        set(nuevaArea) {
+            // Cambiamos el ancho para que mantenga el alto
+            ancho = nuevaArea / alto
+        }
+    }
+}
+var r = Rectangulo(ancho: 4, alto: 2)
+
+print(r.area)  // get: devuelve 8
+
+r.area = 10     // set: cambia el ancho para que área sea 10
+print(r.ancho)  // ahora ancho es 5.0, porque 10 / 2 = 5
