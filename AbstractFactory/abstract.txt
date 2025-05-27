@@ -58,25 +58,17 @@ clase FabricaTemaOscuro implementa FabricaGUI:
         return new CheckboxOscuro()
 
 
-//Cliente que usa la fabrica
-clase Aplicacion:
-    constructor(temaUsuario)
-        fabrica = FabricaGUI
+//Cliente que usa la Abstract Factory
+funcion iniciarAplicacion(fabrica: FabricaGUI):
+    boton = fabrica.crearBoton()
+    checkbox = fabrica.crearCheckbox()
 
-        si temaUsuario == "claro":
-            fabrica = new FabricaTemaClaro
-        sino:
-            fabrica = new FabricaTemaOscuro
-
-        this.boton = fabrica.crearBoton()
-        this.checkbox = fabrica.crearCheckbox()
-    
-    metodo dibujarInterfaz():
-        boton.dibujar()
-        boton.checkbox()
+    boton.dibujar()
+    checkbox.dibujar()
 
 
 //Uso del patron
-temaUsuario = "oscuro"
-app = new Aplicacion(temaUsuario)
-app.dibujarInterfaz()
+fabrica = new FabricaTemaOscuro()
+iniciarAplicacion(fabrica)
+
+
