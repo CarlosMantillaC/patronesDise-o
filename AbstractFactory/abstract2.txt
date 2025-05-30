@@ -12,6 +12,7 @@ clase ventanaWindows impl ventana:
     abrir():
         imprimir ("abrir ventana Windows")
 
+
 clase botonMac impl boton:
     mostrar():
         imprimir ("boton Mac")
@@ -43,3 +44,12 @@ clase fabricaMac imp fabrica:
         return ventanaMac()
 
 
+funcion iniciarFabrica(fabrica: fabrica):
+    boton = fabrica.crearBoton()
+    ventana = fabrica.crearVentana()
+    boton.mostrar()
+    ventana.abrir()
+
+fabricaWindows = new fabricaWindows()
+
+iniciarFabrica(fabricaWindows)

@@ -1,0 +1,47 @@
+clase Computadora:
+    propiedad ram
+    propiedad cpu
+    propiedad gpu
+    propiedad almacenamiento
+
+    metodo mostrarEspecificaciones():
+        imprimir "CPU: " + cpu
+        imprimir "RAM: " + ram
+        imprimir "Almacenamiento: " + almacenamiento
+        imprimir "Gráfica: " + tarjetaGrafica
+
+
+interfaz construirComputadora:
+    metodo ponerRam()
+    metodo ponerCpu()
+    metodo ponerGpu()
+    metodo ponerAlmacenamiento()
+    metodo obtenerComputadora()
+
+
+clase construirComputadoraGamer impl construirComputadora:
+    computadora = new computadora()
+
+    metodo ponerRam():
+        computadora.ram = "16"
+    
+    metodo ponerCpu():
+        computadora.cpu = "Intel Core i9"
+
+    metodo ponerGpu():
+        computadora.gpu = "Nvidia Geforce 5090"
+
+    metodo ponerAlmacenamiento():
+        computadora.almacenamiento = "ssd 1tb"
+    
+    metodo obtenerComputadora():
+        return computadora
+
+
+construirComputadoraGamer = new construirComputadoraGamer()
+construirComputadoraGamer.ponerRam()
+construirComputadoraGamer.ponerCpu()
+
+computadoraGamer = construirComputadoraGamer.obtenerComputadora()
+
+computadoraGamer.mostrarEspecificaciones()

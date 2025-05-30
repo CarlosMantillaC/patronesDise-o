@@ -10,67 +10,50 @@ Construccion de un vehiculo que puede tener distintas configuraciones:
 coche deportivo, coche familiar, etc.
 */
 
-//Interfaz base
 interfaz ComponenteHTML:
     metodo mostrar()
 
-//Componentes concretos
-clase Select implements ComponenteHTML {
-    metodo mostrar(): Texto {
+
+clase Select implements ComponenteHTML:
+    metodo mostrar(): Texto:
         retornar "<select>Mostrar</select>"
-    }
-}
 
-clase Button implements ComponenteHTML {
-    metodo mostrar(): Texto {
+clase Button implements ComponenteHTML:
+    metodo mostrar(): Texto:
         retornar "<button>Mostrar</button>"
-    }
-}
 
-clase Checkbox implements ComponenteHTML {
-    metodo mostrar(): Texto {
+clase Checkbox implements ComponenteHTML:
+    metodo mostrar(): Texto:
         retornar "<input type='checkbox' /> Mostrar"
-    }
-}
 
-//clase builder para construir un formulario HTML
+
 clase Builder:
-    nombresComponentes: []
+    componentes: []
 
-    metodo agregar(nombre):
-        nombresComponentes.agregar(nombre)
-        return this //retorna el objeto completo
+    metodo agregar(componente: ComponenteHTML):
+        componentes.agregar(componente)
+        retornar this
 
-    metodo buid():
-        variable html = ""
+    metodo build():
+        html = ""
+        para cada c en componentes:
+            html += c.mostrar() + "\n"
+        retornar new Form(html)
 
-        para cada nombre en nombresComponentes:
-            si nombre == "select": 
-                html += new Select.mostrar()
-            sino si nombre == "checkbox":
-                html += new Checkbox.mostrar()
-            sino si nombre == "button":
-                html += new Button.mostrar()
-            sino:
-                imprimir "⚠️ Componente no válido: '" + nombre + "'"
-        
-        return new Form(html)
 
-//clase Form que representa el resultado construido
 clase Form:
-    
     constructor(html):
         this.html = html
-    
+
     metodo render():
-        return html
+        retornar html
 
 
-//Uso del Builder
+// Uso
 form = new Builder()
-form.agregar("Select")
-form.agregar("Button")
-form.build()
+    .agregar(new Select())
+    .agregar(new Button())
+    .agregar(new Checkbox())
+    .build()
 
 imprimir form.render()
-
