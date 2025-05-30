@@ -1,0 +1,45 @@
+interface boton:
+    mostrar()
+
+interfecace ventana:
+    abrir()
+
+clase botonWindows impl boton:
+    mostrar():
+        imprimir ("boton windows")
+
+clase ventanaWindows impl ventana:
+    abrir():
+        imprimir ("abrir ventana Windows")
+
+clase botonMac impl boton:
+    mostrar():
+        imprimir ("boton Mac")
+
+clase ventanaMac impl ventana:
+    abrir():
+        imprimir ("abrir ventana Mac")
+
+
+interface fabrica:
+    crearBoton()
+    crearVentana()
+
+clase fabricaWindows impl fabrica:
+
+    crearBoton():   
+        return botonWindows()
+
+    crearVentana():
+        return ventanaWindows()
+
+
+clase fabricaMac imp fabrica:
+
+    crearBoton():
+        return botonMac()
+
+    crearVentana():
+        return ventanaMac()
+
+
