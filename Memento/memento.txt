@@ -23,8 +23,7 @@ clase Memento:
 //Clase originador: el objeto principal cuyo estado queremos guardar
 clase EditorTexto:
 
-    constructor():
-        this.contenido = ""
+    this.contenido = ""
 
     metodo escribir(texto):
         this.contenido += texto
@@ -42,8 +41,7 @@ clase EditorTexto:
 //Clase cuidador (caretaker): guarda y deshace los mementos
 clase Historial:
 
-    constructor():
-        this.cambios = [Memento]
+    cambios = [Memento]
 
     metodo guardar(memento: Memento):
         this.cambios.agregar(memento)

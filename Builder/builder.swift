@@ -15,38 +15,14 @@ class Checkbox: ComponenteHTML {
     func mostrar() -> String { "<input type='checkbox' /> Mostrar" }
 }
 
-class Builder {
-    private var nombresComponentes: [String] = []
-    
-    func agregar(nombre: String) -> Self {
-        nombresComponentes.append(nombre.lowercased())
-        return self
-    }
-    
-    func build() -> Form {
-        var html = ""
-        for nombre in nombresComponentes {
-            switch nombre {
-            case "select":
-                html += Select().mostrar()
-            case "button":
-                html += Button().mostrar()
-            case "checkbox":
-                html += Checkbox().mostrar()
-            default:
-                print("⚠️ Componente no válido: '\(nombre)'")
-                continue
-            }
-        }
-        return Form(html: html)
-    }
-}
 
+
+// Producto final
 class Form {
-    private let html: String
+    private var html: String = ""
     
-    init(html: String) {
-        self.html = html
+    func agregarComponente(_ componente: ComponenteHTML) {
+        html += componente.mostrar()
     }
     
     func render() -> String {
@@ -54,19 +30,39 @@ class Form {
     }
 }
 
-// Uso con validación
-let form = Builder()
-    .agregar(nombre: "select")
-    .agregar(nombre: "button")
-    .agregar(nombre: "checkbox")
+// Builder clásico orientado a objetos
+class FormBuilder {
+    private var componentes: [ComponenteHTML] = []
+    
+    func agregar(_ componente: ComponenteHTML) -> Self {
+        componentes.append(componente)
+        return self
+    }
+    
+    func build() -> Form {
+        let form = Form()
+        for componente in componentes {
+            form.agregarComponente(componente)
+        }
+        return form
+    }
+}
+
+// Uso del Builder
+
+let form1 = FormBuilder()
+    .agregar(Select())
+    .agregar(Button())
+    .agregar(Checkbox())
+    .agregar(Button())
     .build()
 
-    let form2 = Builder()
-    .agregar(nombre: "select")
-    .agregar(nombre: "button")
-    .agregar(nombre: "checkbox")
+let form2 = FormBuilder()
+    .agregar(Select())
+    .agregar(Select())
+    .agregar(Checkbox())
     .build()
 
-
-print(form.render())
+print(form1.render())
+print("-------------")
 print(form2.render())

@@ -1,73 +1,63 @@
-// Protocolo simple sin associatedtype
-protocol Iterador {
-    func hayMas() -> Bool
-    func siguiente() -> Libro?
-}
-
 class Libro {
-    var titulo: String
+    
+    var titulo = ""
     
     init(titulo: String) {
         self.titulo = titulo
     }
     
-    func getTitulo() -> String {
-        return self.titulo
+    func obtenerTitulo() {
+        print(titulo)
     }
 }
 
 class Biblioteca {
-    private var libros: [Libro]
     
-    init() {
-        self.libros = []
-    }
+    var libros: [Libro] = []
     
     func agregarLibro(libro: Libro) {
-        self.libros.append(libro)
+        libros.append(libro)
+        
     }
     
-    func contarLibros() -> Int {
-        return self.libros.count
+    func cantidadLibro() -> Int {
+        return libros.count
     }
     
-    func getLibroEn(posicion: Int) -> Libro {
-        return self.libros[posicion]
-    }
 }
 
-class BibliotecaIterator: Iterador {
-    private let biblioteca: Biblioteca
-    private var posicionActual: Int = 0
+class Iterador {
+    
+    var biblioteca: Biblioteca
+    var indiceActual: Int = 0
     
     init(biblioteca: Biblioteca) {
         self.biblioteca = biblioteca
     }
     
-    func hayMas() -> Bool {
-        return posicionActual < biblioteca.contarLibros()
+    func siHayMas() -> Bool {
+        return indiceActual < biblioteca.cantidadLibro()
     }
     
-    func siguiente() -> Libro? {
-        if hayMas() {
-            let libro = biblioteca.getLibroEn(posicion: posicionActual)
-            posicionActual += 1
-            return libro
+    func siguienteLibro() -> Libro? {
+        guard siHayMas() else {
+            return nil
         }
-        return nil
+        let libro = biblioteca.libros[indiceActual]
+        indiceActual += 1
+        return libro
     }
+    
 }
 
-// Uso
 let biblioteca = Biblioteca()
-biblioteca.agregarLibro(libro: Libro(titulo: "El Quijote"))
-biblioteca.agregarLibro(libro: Libro(titulo: "Cien años de soledad"))
-biblioteca.agregarLibro(libro: Libro(titulo: "Crónica de una muerte anunciada"))
 
-let iterador: Iterador = BibliotecaIterator(biblioteca: biblioteca)
+biblioteca.agregarLibro(libro: Libro(titulo: "cien años de soledad"))
+biblioteca.agregarLibro(libro: Libro(titulo: "harry potter"))
+biblioteca.agregarLibro(libro: Libro(titulo: "no se xd"))
 
-while iterador.hayMas() {
-    if let libro = iterador.siguiente() {
-        print(libro.getTitulo())
-    }
+let iterador = Iterador(biblioteca: biblioteca)
+
+while iterador.siHayMas() {
+    iterador.siguienteLibro()?.obtenerTitulo()
 }

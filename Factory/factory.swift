@@ -1,8 +1,14 @@
 protocol JuguetesAcciones {
     func encender()
+    func mostrarMaterial()
 }
 
 class Juguete {
+    var material = "Plastico"
+    
+    func mostrarMaterial() {
+        print(material)
+    }
 }
 
 class Carro: Juguete, JuguetesAcciones {
@@ -17,20 +23,23 @@ class Muñeca: Juguete, JuguetesAcciones {
     }
 }
 
-func factoryJuguetes(tipo: String) -> JuguetesAcciones? {
-    if tipo == "carro" {
+func factory(tipo: String) -> JuguetesAcciones? {
+
+    switch tipo.lowercased() {
+    case "carro":
         return Carro()
-    } else if tipo == "muñeca" {
+    case "muñeca":
         return Muñeca()
+    default:
+        return nil
     }
-    return nil
-} 
-
-if let carro = factoryJuguetes(tipo: "carro") {
-    carro.encender()
-} 
-
-if let muñeca = factoryJuguetes(tipo: "muñeca"){
-    muñeca.encender()
 }
 
+if let carro = factory(tipo: "carro") {
+    carro.encender()
+    carro.mostrarMaterial()
+}
+if let muñeca = factory(tipo: "muñeca") {
+    muñeca.encender()
+    muñeca.mostrarMaterial()
+}
