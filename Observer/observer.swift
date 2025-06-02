@@ -1,83 +1,67 @@
-protocol Notificador {
-    func notificar(mensaje: String)
+protocol Observador {
+    func actualizar(mensaje: String)
 }
 
-class SmsNotificador: Notificador {
-    let usuario: String
+protocol Sujeto {
+    func agregarObservador(obs: Observador)
+    func notificarObservadores(mensaje: String)
+}
+
+class CanalYoutube: Sujeto {
     
-    init (usuario: String) {
-        self.usuario = usuario
-    }
-
-    func notificar(mensaje: String) {
-        print("[SMS] Notificación a \(usuario): \(mensaje)")
-    }
-
-}
-
-class EmailNotificador: Notificador {
-    let usuario: String
-
-    init(usuario: String) {
-        self.usuario = usuario
-    }
-
-    func notificar(mensaje: String) {
-        print("[EMAIL] Notificación a \(usuario): \(mensaje)")
-    }
-}
-
-func crearNotificador(tipo: String, usuario: String) -> Notificador {
-    switch tipo.lowercased() {
-    case "email":
-        return EmailNotificador(usuario: usuario)
-    case "sms":
-        return SmsNotificador(usuario: usuario)
-    default:
-        fatalError("Tipo de notificación no válido")
-    }
-}
-
-class Usuario {
-    let nombre: String
-    let tipoNotificacion: String
-
-    init(nombre: String, tipoNotificacion: String) {
-        self.nombre = nombre
-        self.tipoNotificacion = tipoNotificacion
-    }
-
-    func obtenerNotificador() -> Notificador {
-        return crearNotificador(tipo: tipoNotificacion, usuario: nombre)
-    }
-}
-
-class CanalYouTube {
-    let nombre: String
-    var suscriptores: [Notificador] = []
-
+    var nombre = ""
+    var observadores: [Observador] = []
+    
     init(nombre: String) {
         self.nombre = nombre
     }
-
-    func agregarSuscriptor(_ notificador: Notificador) {
-        suscriptores.append(notificador)
+    
+    func agregarObservador(obs: any Observador) {
+        observadores.append(obs)
     }
-
-    func subirVideo(titulo: String) {
-        print("\n[\(nombre)] Nuevo video subido: \(titulo)")
-        for sub in suscriptores {
-            sub.notificar(mensaje: "Nuevo video: \(titulo)")
+    
+    func notificarObservadores(mensaje: String) {
+        for obs in observadores {
+            obs.actualizar(mensaje: "[\(nombre)] \(mensaje)")
         }
+    }
+    
+    func subirVideo(titulo: String) {
+        notificarObservadores(mensaje: "Nuevo video: \(titulo)")
+    }
+    
+}
+
+class UsuarioEmail: Observador {
+    
+    var nombre = ""
+    
+    init(nombre: String = "") {
+        self.nombre = nombre
+    }
+    
+    func actualizar(mensaje: String) {
+        print("[EMAIL] \(nombre) recibió: \(mensaje)")
     }
 }
 
-let canal = CanalYouTube(nombre: "TechMind")
+class UsuarioSms: Observador {
+    
+    var nombre = ""
 
-let usuario1 = Usuario(nombre: "Ana", tipoNotificacion: "email")
-let usuario2 = Usuario(nombre: "Luis", tipoNotificacion: "sms")
+    init(nombre: String = "") {
+        self.nombre = nombre
+    }
+    
+    func actualizar(mensaje: String) {
+        print("[SMS] \(nombre) recibió: \(mensaje)")
+    }
+}
 
-canal.agregarSuscriptor(usuario1.obtenerNotificador())
-canal.agregarSuscriptor(usuario2.obtenerNotificador())
+let canal = CanalYoutube(nombre: "SwiftBeta")
 
-canal.subirVideo(titulo: "Observer Pattern en Swift")
+canal.agregarObservador(obs: UsuarioSms(nombre: "Ana"))
+canal.agregarObservador(obs: UsuarioEmail(nombre: "Ana"))
+
+canal.subirVideo(titulo: "Patron Observer")
+
