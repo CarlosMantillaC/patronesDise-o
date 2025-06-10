@@ -2,7 +2,6 @@ protocol ComponenteHTML {
     func mostrar() -> String
 }
 
-// Componentes concretos
 class Select: ComponenteHTML {
     func mostrar() -> String { "<select>Mostrar</select>" }
 }
@@ -15,9 +14,6 @@ class Checkbox: ComponenteHTML {
     func mostrar() -> String { "<input type='checkbox' /> Mostrar" }
 }
 
-
-
-// Producto final
 class Form {
     private var html: String = ""
     
@@ -30,7 +26,6 @@ class Form {
     }
 }
 
-// Builder clásico orientado a objetos
 class FormBuilder {
     private var componentes: [ComponenteHTML] = []
     
@@ -47,8 +42,6 @@ class FormBuilder {
         return form
     }
 }
-
-// Uso del Builder
 
 let form1 = FormBuilder()
     .agregar(Select())

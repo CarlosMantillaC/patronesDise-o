@@ -29,7 +29,6 @@ class ComputadoraGamer: ObtenerEspecificaciones {
     
     var computadora = Computadora()
     
-    
     func obtenerCpu() {
         computadora.cpu = "Intel I7"
     }
@@ -55,7 +54,6 @@ class ComputadoraGamer: ObtenerEspecificaciones {
 
 class ComputadoraOficina: ObtenerEspecificaciones {
     var computadora = Computadora()
-    
     
     func obtenerCpu() {
         computadora.cpu = "Intel I5"
