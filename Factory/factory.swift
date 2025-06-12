@@ -1,45 +1,46 @@
-protocol JuguetesAcciones {
+protocol Acciones {
+    
     func encender()
-    func mostrarMaterial()
 }
 
 class Juguete {
-    var material = "Plastico"
     
-    func mostrarMaterial() {
-        print(material)
-    }
+    var material: String = "Plastico"
 }
 
-class Carro: Juguete, JuguetesAcciones {
+class Carro: Juguete, Acciones {
+    
     func encender() {
-        print("El carro se ha encendido")
+        print("carro encendiendo")
     }
 }
 
-class Muñeca: Juguete, JuguetesAcciones {
+class Muneca: Juguete, Acciones {
+    
     func encender() {
-        print("La muñeca se ha encendido")
+        print("muñeca encendiendo")
     }
 }
 
-func factory(tipo: String) -> JuguetesAcciones? {
-
+func factory(tipo: String) -> (Juguete & Acciones)? {
+    
     switch tipo.lowercased() {
     case "carro":
         return Carro()
     case "muñeca":
-        return Muñeca()
+        return Muneca()
     default:
         return nil
     }
 }
 
+
 if let carro = factory(tipo: "carro") {
     carro.encender()
-    carro.mostrarMaterial()
+    print(carro.material)
 }
-if let muñeca = factory(tipo: "muñeca") {
-    muñeca.encender()
-    muñeca.mostrarMaterial()
+
+if let muneca = factory(tipo: "muñeca") {
+    muneca.encender()
+    print(muneca.material)
 }

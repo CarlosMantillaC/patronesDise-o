@@ -1,99 +1,88 @@
-class Computadora {
+protocol Character {
     
-    var cpu: String = ""
-    var gpu: String = ""
-    var ram: String = ""
-    var alm: String = ""
+    var name: String { get set }
+    var characterClass: String { get set }
+    var armor: String { get set }
+    var weapon: String { get set }
+    var power: String? { get set }
+    var pet: String? { get set }
+}
+
+class RPGCharacter: Character {
+    var name: String = ""
+    var characterClass: String = ""
+    var armor: String = ""
+    var weapon: String = ""
+    var power: String? = nil
+    var pet: String? = nil
+}
+
+class PrintCharacter {
+    static func show(character: Character) {
+        print("Nombre: \(character.name)")
+        print("Clase: \(character.characterClass)")
+        print("Armadura: \(character.armor)")
+        print("Arma: \(character.weapon)")
+        print("Poder: \(character.power ?? "no tiene")")
+        print("Mascota: \(character.pet ?? "no tiene")")
+    }
+}
+
+protocol CharacterBuilder {
+    func setName(_ name: String)
+    func setClass(_ characterClass: String)
+    func setArmor(_ armor: String)
+    func setWeapon(_ weapon: String)
+    
+    func setSpecialPower(_ power: String)
+    func setPet(_ pet: String)
+    
+    func build() -> Character
+}
+
+class RPGCharacterBuilder: CharacterBuilder {
+    
+    var character = RPGCharacter()
+    
+    func setName(_ name: String) {
+        character.name = name
+    }
+    
+    func setClass(_ characterClass: String) {
+        character.characterClass = characterClass
+    }
+    
+    func setArmor(_ armor: String) {
+        character.armor = armor
+    }
+    
+    func setWeapon(_ weapon: String) {
+        character.weapon = weapon
+    }
+    
+    func setSpecialPower(_ power: String) {
+        character.power = power
+    }
+    
+    func setPet(_ pet: String) {
+        character.pet = pet
+    }
+    
+    func build() -> any Character {
+        return character
+    }
+    
+
 }
 
 
-class ComputadoraPrinter {
-    static func mostrar(_ computadora: Computadora) {
-        print("cpu: \(computadora.cpu)")
-        print("gpu: \(computadora.gpu)")
-        print("ram: \(computadora.ram)")
-        print("almacenamiento: \(computadora.alm)")
-    }
-}
+let builder = RPGCharacterBuilder()
 
+builder.setName("juan")
+builder.setArmor("arma1")
+builder.setClass("class1")
+builder.setWeapon("weapon1")
 
-protocol ObtenerEspecificaciones {
-    func obtenerCpu()
-    func obtenerGpu()
-    func obtenerRam()
-    func obtenerAlm()
-    func obtenerComponentesComputador() -> Computadora
-}
+let builderListo = builder.build()
 
-class ComputadoraGamer: ObtenerEspecificaciones {
-    
-    var computadora = Computadora()
-    
-    func obtenerCpu() {
-        computadora.cpu = "Intel I7"
-    }
-    
-    func obtenerGpu() {
-        computadora.gpu = "RX 580"
-    }
-    
-    func obtenerRam() {
-        computadora.ram = "16"
-    }
-    
-    func obtenerAlm() {
-        computadora.alm = "256"
-    }
-    
-    func obtenerComponentesComputador() -> Computadora {
-        return computadora
-    }
-    
-}
-
-
-class ComputadoraOficina: ObtenerEspecificaciones {
-    var computadora = Computadora()
-    
-    func obtenerCpu() {
-        computadora.cpu = "Intel I5"
-    }
-    
-    func obtenerGpu() {
-        computadora.gpu = "RX 520"
-    }
-    
-    func obtenerRam() {
-        computadora.ram = "18"
-    }
-    
-    func obtenerAlm() {
-        computadora.alm = "128"
-    }
-    
-    func obtenerComponentesComputador() -> Computadora {
-        return computadora
-    }
-    
-}
-
-let armarPCGamer = ComputadoraGamer()
-
-armarPCGamer.obtenerCpu()
-armarPCGamer.obtenerAlm()
-armarPCGamer.obtenerRam()
-
-var obtenerPCGamer = armarPCGamer.obtenerComponentesComputador()
-
-ComputadoraPrinter.mostrar(obtenerPCGamer)
-
-
-let armarPCOficina = ComputadoraOficina()
-
-armarPCOficina.obtenerAlm()
-armarPCOficina.obtenerCpu()
-
-var obtenerPCOficina = armarPCOficina.obtenerComponentesComputador()
-
-print("\n")
-ComputadoraPrinter.mostrar(obtenerPCOficina)
+PrintCharacter.show(character: builderListo)
