@@ -12,15 +12,21 @@ print(sumaRecursiva(n: 5))
 
 /*
 
- sumaRecursiva(4)
- → 4 + sumaRecursiva(3)
- → 4 + (3 + sumaRecursiva(2))
- → 4 + (3 + (2 + sumaRecursiva(1)))
- → 4 + (3 + (2 + (1 + sumaRecursiva(0))))
- → 4 + (3 + (2 + (1 + 0)))     ← condición base aquí
- → 4 + (3 + (2 + 1))
- → 4 + (3 + 3)
- → 4 + 6
- → 10
- 
+5 + sumaRecursiva(n: 4)
+4 + sumaRecursiva(n: 3)
+3 + sumaRecursiva(n: 2)
+2 + sumaRecursiva(n: 1)
+1 + sumaRecursiva(n: 0)
+0
+
+1 + 0 = 1
+
+2 + 1 = 3
+
+3 + 3 = 6
+
+4 + 6 = 10
+
+5 + 10 = 15
+
  */
